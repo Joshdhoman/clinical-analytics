@@ -1,0 +1,6 @@
+# Tested against these versions on 2026-08-28.
+# streamlit >= 1.49 is required for the width="stretch" API used in app.py.
+streamlit>=1.49,<2
+pandas>=2.2,<4
+numpy>=1.26,<3
+plotly>=5.18,<8

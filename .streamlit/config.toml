@@ -1,0 +1,8 @@
+[theme]
+# THQ Exhibit Style — light / warm-paper base (see THQ_EXHIBIT_STYLE_GUIDE.md §4).
+base = "light"
+primaryColor = "#0f8f83"
+backgroundColor = "#f6f4ef"
+secondaryBackgroundColor = "#efeae0"
+textColor = "#141c26"
+font = "sans serif"
