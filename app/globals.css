@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens
+   ---------------------------------------------------------------------------
+   Everything visual on this site comes from the values below. Sections should
+   reference tokens (bg-canvas, text-ink-muted, border-line, ...) rather than
+   raw Tailwind palette classes, so a change here propagates everywhere.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Surfaces — light and bright, with white as the default page ground. */
+  --color-canvas: #ffffff;
+  --color-surface: #f8f8f9;
+
+  /* Text — a four-step ink ramp. Near-black rather than pure black; pure
+     black on white reads harsh at body sizes. */
+  --color-ink: #18181b;
+  --color-ink-muted: #52525b;
+  --color-ink-subtle: #8b8b93;
+  --color-ink-inverse: #ffffff;
+
+  /* Hairlines. The site uses thin rules instead of cards/shadows. */
+  --color-line: #e6e6e9;
+  --color-line-strong: #d1d1d6;
+
+  /* Accent — forest green, and the only chromatic color in the system.
+     Three roles:
+       accent       graphic marks, fills, chart series, underlines
+       accent-ink   accent-colored TEXT and deeper emphasis
+       accent-soft  tinted background wash behind small callouts
+     Unlike a light accent, this green clears WCAG AA on white at both
+     weights (accent ~6:1, accent-ink ~9:1), so accent text is safe. */
+  --color-accent: #2f6f4e;
+  --color-accent-ink: #1f5138;
+  --color-accent-soft: #eff5f1;
+
+  /* Content width. Sections share one measure so edges line up down the page. */
+  --container-content: 68rem;
+}
+
+@theme inline {
+  /* Wired to the next/font variables declared in app/layout.tsx. */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+
+:root {
+  /* Light-only by design. This keeps native controls and scrollbars light
+     instead of following the OS into dark mode. */
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+/* Tabular, monospace numerals for any figure that should line up in a column
+   — stat readouts, chart labels, table cells. */
+.numeral {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
