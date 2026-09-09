@@ -44,6 +44,20 @@ const clinicalAiFocus = [
 
 const projects = [
   {
+    title: "Clinical AI Transfer Assistant",
+    type: "Decision support · NLP and interpretable ML",
+    description:
+      "Turns an unstructured transfer referral into a reviewable summary and a provisional routing suggestion. Rule-based NLP extracts sixteen fields and shows the source text as evidence for each one, flags what is missing or contradictory, and an interpretable decision tree offers a second opinion. A coordinator confirms or overrides every suggestion, and the decision is written to an audit log.",
+    href: siteConfig.transferAssistantUrl,
+    tags: [
+      "NLP",
+      "Interpretable ML",
+      "Streamlit",
+      "Human-in-the-loop",
+      "Synthetic data",
+    ],
+  },
+  {
     title: "Transfer Center vs. Emergency Department",
     type: "Patient placement analytics",
     description:
@@ -145,7 +159,7 @@ export default function Home() {
 
       <section>
         <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-          Project focus
+          Inside the placement dashboard
         </h2>
 
         <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
@@ -190,6 +204,14 @@ export default function Home() {
             </div>
           ))}
         </dl>
+
+        <p className="mt-8 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
+          The transfer assistant is where this is worked out in code: every
+          extracted field carries the source text it came from, the model
+          abstains rather than guessing when evidence is thin, and a coordinator
+          confirms or overrides each suggestion. Synthetic data only, decision
+          support only — it is not validated for clinical use.
+        </p>
       </section>
 
       <hr className="my-14 border-line sm:my-16" />

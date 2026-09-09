@@ -35,6 +35,8 @@ export const siteConfig = {
   githubUrl: "https://github.com/Joshdhoman",
   repoUrl: "https://github.com/Joshdhoman/clinical-analytics",
   dashboardUrl: "https://github.com/Joshdhoman/clinical-analytics/tree/main/dashboard",
+  transferAssistantUrl:
+    "https://github.com/Joshdhoman/clinical-ai-transfer-assistant",
   resumeUrl: "/Josh_Homan_Resume_Sept_2026.pdf",
 } as const;
 
