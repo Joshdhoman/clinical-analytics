@@ -87,16 +87,22 @@ line up in a column (stat readouts, chart labels, table cells).
 
 - Done: scaffold, design tokens, metadata / OG / favicon / robots / sitemap,
   README, hero, selected work, project focus, clinical AI, contact.
-- The **decline prediction project** that section 2 is supposed to lead with
-  does not exist yet. `dashboard/` is descriptive only — pandas, numpy, plotly,
-  no model.
+- **Live at https://clinical-analytics.vercel.app** — Vercel, git-linked, so a
+  push to `main` auto-deploys. Vercel Authentication is deliberately off; it
+  ships on by default and puts a login wall in front of the site.
+- The AI work lives in a **separate repo**,
+  `Joshdhoman/clinical-ai-transfer-assistant`, deployed at
+  https://clinical-ai-transfer-assistant.streamlit.app. Keep it separate — it
+  is a Python package with its own CI, tests, and notebooks, and folding it in
+  would break its reproducibility story. The site links to it.
+- `dashboard/` is still descriptive only — pandas, numpy, plotly, no model.
 - The line to hold: stating what Josh is *open to* or how he *evaluates* AI is
   honest and belongs on the site. Describing a **project** as AI, ML, or
   predictive when no model exists is not. Do not tag `dashboard/` as AI. When
   the prediction model ships, it earns those words on its own card.
-- The GitHub repo is **private**, so `repoUrl` / `dashboardUrl` 404 for every
-  visitor. Must be made public before the site goes live, or those links have
-  to change.
+- Both GitHub repos are public, so the outbound links resolve. Re-check that
+  before adding any new outbound link — a 404 on the portfolio's own project
+  links is the worst bug this site can ship.
 
 ## Checks
 

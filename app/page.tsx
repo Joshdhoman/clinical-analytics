@@ -42,13 +42,24 @@ const clinicalAiFocus = [
   },
 ];
 
-const projects = [
+type Project = {
+  title: string;
+  type: string;
+  description: string;
+  href: string;
+  /** Set when the project is deployed somewhere a visitor can use it. */
+  demoHref?: string;
+  tags: string[];
+};
+
+const projects: Project[] = [
   {
     title: "Clinical AI Transfer Assistant",
     type: "Decision support · NLP and interpretable ML",
     description:
       "Turns an unstructured transfer referral into a reviewable summary and a provisional routing suggestion. Rule-based NLP extracts sixteen fields and shows the source text as evidence for each one, flags what is missing or contradictory, and an interpretable decision tree offers a second opinion. A coordinator confirms or overrides every suggestion, and the decision is written to an audit log.",
     href: siteConfig.transferAssistantUrl,
+    demoHref: siteConfig.transferAssistantDemoUrl,
     tags: [
       "NLP",
       "Interpretable ML",
@@ -140,14 +151,24 @@ export default function Home() {
                 ))}
               </div>
 
-              <p className="mt-6">
+              <p className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+                {project.demoHref ? (
+                  <a
+                    href={project.demoHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center rounded-sm bg-accent px-4 py-2 text-sm font-medium text-ink-inverse transition-opacity hover:opacity-90"
+                  >
+                    Open the live app
+                  </a>
+                ) : null}
                 <a
                   href={project.href}
                   target="_blank"
                   rel="noreferrer"
                   className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
                 >
-                  View project
+                  {project.demoHref ? "Source and methodology" : "View project"}
                 </a>
               </p>
             </article>
