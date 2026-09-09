@@ -33,6 +33,9 @@ export const siteConfig = {
   url: resolveSiteUrl(),
   xHandle: "@TheHomanQuant",
   xUrl: "https://x.com/TheHomanQuant",
+  githubUrl: "https://github.com/Joshdhoman",
+  repoUrl: "https://github.com/Joshdhoman/clinical-analytics",
+  dashboardUrl: "https://github.com/Joshdhoman/clinical-analytics/tree/main/dashboard",
 } as const;
 
 /**

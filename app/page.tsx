@@ -1,101 +1,138 @@
-// TEMPORARY — a specimen page for checking the design tokens render correctly.
-// This gets replaced wholesale by the hero section in the next step.
+import { siteConfig } from "@/lib/site";
 
-const swatches = [
-  { token: "bg-canvas", className: "bg-canvas border border-line", hex: "#ffffff" },
-  { token: "bg-surface", className: "bg-surface", hex: "#f8f8f9" },
-  { token: "bg-ink", className: "bg-ink", hex: "#18181b" },
-  { token: "bg-ink-muted", className: "bg-ink-muted", hex: "#52525b" },
-  { token: "bg-line", className: "bg-line", hex: "#e6e6e9" },
-  { token: "bg-accent", className: "bg-accent", hex: "#2f6f4e" },
-  { token: "bg-accent-ink", className: "bg-accent-ink", hex: "#1f5138" },
-  { token: "bg-accent-soft", className: "bg-accent-soft border border-line", hex: "#eff5f1" },
+/**
+ * Homepage.
+ *
+ * Three sections on one shared measure (max-w-content) so every left edge
+ * lines up down the page: who this is, what has been built, how to reach him.
+ * Sections are separated by hairline rules rather than cards or shadows,
+ * per the design system in app/globals.css.
+ */
+
+/**
+ * What the Transfer Center dashboard actually examines. These are the
+ * questions the app answers, not results — the underlying extract is
+ * synthetic and regenerated per run, so quoting fixed figures here would be
+ * inventing findings.
+ */
+const transferCenterFocus = [
+  {
+    label: "Volume",
+    detail: "Monthly encounter trend, split by admission source.",
+  },
+  {
+    label: "Acuity",
+    detail: "Level-of-care and service-line mix for transfers vs. ED admits.",
+  },
+  {
+    label: "Length of stay",
+    detail: "Median and distribution, stratified by level of care.",
+  },
+  {
+    label: "Mapping",
+    detail: "Every field traced to its Epic Clarity / Caboodle source.",
+  },
 ];
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-content px-6 py-20">
-      <p className="numeral text-xs uppercase tracking-widest text-ink-subtle">
-        Design tokens
-      </p>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink">
-        Specimen
-      </h1>
-      <p className="mt-3 max-w-xl text-ink-muted">
-        Temporary page. Confirms the color, type, and numeral tokens compile
-        before any real content is built on top of them.
-      </p>
-
-      <hr className="my-12 border-line" />
-
+    <main className="mx-auto w-full max-w-content px-6 py-20 sm:py-28">
+      {/* --- Hero ------------------------------------------------------- */}
       <section>
-        <h2 className="text-sm font-medium uppercase tracking-widest text-ink-subtle">
-          Color
-        </h2>
-        <div className="mt-6 grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-4">
-          {swatches.map((s) => (
-            <div key={s.token}>
-              <div className={`h-16 w-full rounded-sm ${s.className}`} />
-              <p className="mt-2 text-sm text-ink">{s.token}</p>
-              <p className="numeral text-xs text-ink-subtle">{s.hex}</p>
-            </div>
-          ))}
-        </div>
+        <p className="numeral text-xs uppercase tracking-widest text-ink-subtle">
+          {siteConfig.role}
+        </p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+          {siteConfig.name}
+        </h1>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          Registered nurse with twelve years at the bedside, now working the
+          data side of the same problems. I build analytics on the operational
+          questions I used to live with on shift — patient placement, acuity,
+          and throughput.
+        </p>
       </section>
 
-      <hr className="my-12 border-line" />
+      <hr className="my-14 border-line sm:my-16" />
 
+      {/* --- Selected work ---------------------------------------------- */}
       <section>
         <h2 className="text-sm font-medium uppercase tracking-widest text-ink-subtle">
-          Type
+          Selected work
         </h2>
-        <div className="mt-6 space-y-4">
-          <p className="text-5xl font-semibold tracking-tight text-ink">
-            Display — 5xl semibold
+
+        <article className="mt-8">
+          <h3 className="text-2xl font-medium tracking-tight text-ink">
+            Transfer Center vs. Emergency Department
+          </h3>
+          <p className="numeral mt-2 text-xs uppercase tracking-wider text-ink-subtle">
+            Patient placement analytics · Streamlit · Epic-oriented
           </p>
-          <p className="text-2xl font-medium tracking-tight text-ink">
-            Section heading — 2xl medium
+
+          <p className="mt-5 max-w-2xl leading-relaxed text-ink-muted">
+            Inpatient encounters arriving through the Transfer Center run
+            higher acuity than ED admits, so comparing length of stay directly
+            just measures case mix. This dashboard{" "}
+            <span className="text-ink">stratifies LOS by level of care</span>{" "}
+            instead, which asks the sharper operational question: do transfers
+            stay longer <em>at the same level of care</em>, or does the raw gap
+            simply reflect more ICU admissions?
           </p>
-          <p className="max-w-2xl text-base text-ink-muted">
-            Body copy — base, ink-muted. Twelve years at the bedside, now
-            working the data side of the same problems. This paragraph exists to
-            check line length and color contrast at reading size.
-          </p>
-          <p className="text-sm text-ink-subtle">
-            Caption — sm, ink-subtle. Source notes and figure labels.
-          </p>
-          <p>
+
+          <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+            {transferCenterFocus.map(({ label, detail }) => (
+              <div key={label} className="border-t border-line pt-3">
+                <dt className="text-xs uppercase tracking-wider text-ink-subtle">
+                  {label}
+                </dt>
+                <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="mt-8">
             <a
-              href="#"
+              href={siteConfig.dashboardUrl}
               className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
             >
-              An accent link
+              Source and documentation
             </a>
           </p>
-        </div>
+
+          {/* Stated plainly and up front: this is a demonstration build on
+              generated data, and nothing here touches real patient records. */}
+          <p className="mt-6 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
+            Built on synthetic, Epic-shaped data. No real patient records are
+            used, and the app is a demonstration piece — not for clinical use.
+          </p>
+        </article>
       </section>
 
-      <hr className="my-12 border-line" />
+      <hr className="my-14 border-line sm:my-16" />
 
+      {/* --- Contact ---------------------------------------------------- */}
       <section>
         <h2 className="text-sm font-medium uppercase tracking-widest text-ink-subtle">
-          Numerals
+          Elsewhere
         </h2>
-        <dl className="mt-6 grid grid-cols-2 gap-8 sm:grid-cols-4">
-          {[
-            ["Encounters", "18,412"],
-            ["Transfer share", "31.6%"],
-            ["Median LOS", "4.20"],
-            ["ICU at admit", "27.9%"],
-          ].map(([label, value]) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="text-xs uppercase tracking-wider text-ink-subtle">
-                {label}
-              </dt>
-              <dd className="numeral mt-1 text-2xl text-ink">{value}</dd>
-            </div>
-          ))}
-        </dl>
+        <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
+          <li>
+            <a
+              href={siteConfig.xUrl}
+              className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+            >
+              {siteConfig.xHandle}
+            </a>
+          </li>
+          <li>
+            <a
+              href={siteConfig.githubUrl}
+              className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+            >
+              GitHub
+            </a>
+          </li>
+        </ul>
       </section>
     </main>
   );
