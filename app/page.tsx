@@ -94,9 +94,11 @@ export default function Home() {
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           Registered nurse with twelve years at the bedside, now working on the
-          data side of the same operational problems. I build healthcare
-          analytics, decision-support dashboards, and visual explanations that
-          turn messy clinical complexity into clearer stories.
+          data side of the same operational problems. I am the bridge between
+          clinical work and the technology built for it: analytics that show how
+          hospital operations actually run, and NLP and interpretable models
+          that take the clerical weight out of a workflow — with a clinician
+          still making the call.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-4">
