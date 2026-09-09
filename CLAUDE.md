@@ -19,21 +19,24 @@ parse until it exhausts the V8 heap. Leave those exclusions in place.
 
 ## What the site is for
 
-A personal portfolio and credibility site for **Josh Homan** — a registered
-nurse with twelve years of bedside experience moving into clinical analytics
-and data science. Two jobs:
+A personal portfolio site for **Josh Homan** — a registered nurse with twelve
+years of bedside experience moving into clinical analytics and data science.
 
-1. Give hiring managers for clinical analytics roles a place to see healthcare
-   data work.
-2. Serve as a credibility page linked from the X account **@TheHomanQuant**,
-   where quantitative research is posted.
+It has one job: give hiring managers for clinical analytics roles a place to
+see healthcare data work. It is linked from Josh's resume, so every claim on
+it has to survive a hiring manager clicking through to the source.
+
+Social media is deliberately not part of this site. An earlier plan linked it
+to an X account; that was dropped as off-register for the hiring audience. Do
+not reintroduce social links.
 
 ## Planned sections, in order
 
 1. **Hero** — Josh, and the nursing + data science combination
 2. **Healthcare analytics** — leads with a transfer center decline prediction
    project
-3. **Quantitative research** — branded data visualizations
+3. **Quantitative research** — branded data visualizations. Undecided; this
+   section was originally scoped around the X audience and may be cut.
 4. **Contact**
 
 Build one section at a time. Josh reviews each before the next starts.
@@ -78,10 +81,12 @@ line up in a column (stat readouts, chart labels, table cells).
 
 ## Status
 
-- Done: scaffold, design tokens, metadata / OG / favicon / robots / sitemap.
-- `app/page.tsx` is a **temporary token specimen page**. The hero section
-  replaces it wholesale — do not build on it.
-- Root `README.md` is still create-next-app boilerplate and should be replaced.
+- Done: scaffold, design tokens, metadata / OG / favicon / robots / sitemap,
+  README, hero, selected work, project focus, contact.
+- The **decline prediction project** that section 2 is supposed to lead with
+  does not exist yet. `dashboard/` is descriptive only — pandas, numpy, plotly,
+  no model. Until that project is built, nothing on the site may be tagged or
+  described as AI, ML, or predictive.
 
 ## Checks
 

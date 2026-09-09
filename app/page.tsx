@@ -26,7 +26,7 @@ const projects = [
     description:
       "A clinical operations dashboard comparing transfer-center admissions to emergency department admissions with a sharper lens on acuity and length of stay by level of care.",
     href: siteConfig.dashboardUrl,
-    tags: ["Streamlit", "Healthcare", "Operational analytics"],
+    tags: ["Streamlit", "Healthcare", "Operational analytics", "Synthetic data"],
   },
 ];
 
@@ -144,11 +144,26 @@ export default function Home() {
 
       <hr className="my-14 border-line sm:my-16" />
 
-      <section>
+      <section id="contact" className="scroll-mt-20">
         <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-          Elsewhere
+          Contact
         </h2>
-        <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
+
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          Open to clinical analytics and data science roles. The fastest way to
+          reach me is email.
+        </p>
+
+        <p className="mt-6">
+          <a
+            href={`mailto:${siteConfig.email}`}
+            className="text-xl font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+          >
+            {siteConfig.email}
+          </a>
+        </p>
+
+        <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-6">
           <li>
             <a
               href={siteConfig.githubUrl}

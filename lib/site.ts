@@ -31,6 +31,7 @@ export const siteConfig = {
   description:
     "Registered nurse with twelve years at the bedside, now working in clinical analytics and data science. Healthcare data projects and quantitative research.",
   url: resolveSiteUrl(),
+  email: "joshdhoman@gmail.com",
   githubUrl: "https://github.com/Joshdhoman",
   repoUrl: "https://github.com/Joshdhoman/clinical-analytics",
   dashboardUrl: "https://github.com/Joshdhoman/clinical-analytics/tree/main/dashboard",
