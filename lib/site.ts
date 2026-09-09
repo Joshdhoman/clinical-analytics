@@ -35,7 +35,8 @@ export const siteConfig = {
   githubUrl: "https://github.com/Joshdhoman",
   repoUrl: "https://github.com/Joshdhoman/clinical-analytics",
   dashboardUrl: "https://github.com/Joshdhoman/clinical-analytics/tree/main/dashboard",
-  dashboardDemoUrl: process.env.NEXT_PUBLIC_PLACEMENT_DEMO_URL || undefined,
+  dashboardDemoUrl:
+    process.env.NEXT_PUBLIC_PLACEMENT_DEMO_URL || "https://clinical-analytics-dash.streamlit.app",
   transferAssistantUrl:
     "https://github.com/Joshdhoman/clinical-ai-transfer-assistant",
   transferAssistantDemoUrl: "https://clinical-ai-transfer-assistant.streamlit.app",

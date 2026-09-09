@@ -51,9 +51,9 @@ The dashboard has five focused views, reproducible synthetic data, cohort filter
 and searchable CSV export. See `dashboard/README.md` for how to run and deploy it.
 The portfolio case study is at `/projects/patient-placement`.
 
-After deploying `dashboard/app.py` on Streamlit Community Cloud, set
-`NEXT_PUBLIC_PLACEMENT_DEMO_URL` to its verified public URL and redeploy the site
-to enable live-app buttons. The root `.streamlit/config.toml` provides the theme
+The live app is https://clinical-analytics-dash.streamlit.app. Its verified URL
+is configured in `lib/site.ts`; `NEXT_PUBLIC_PLACEMENT_DEMO_URL` can optionally
+override it. The root `.streamlit/config.toml` provides the theme
 when Streamlit starts from the repository root. No secrets are needed.
 
 `dashboard/` is deliberately excluded from `eslint.config.mjs` and

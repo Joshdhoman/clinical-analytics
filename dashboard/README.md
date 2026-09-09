@@ -58,7 +58,7 @@ The portfolio repository contains this app at `dashboard/`. Deploy with:
 
 The repository-root `.streamlit/config.toml` supplies the same theme when Cloud starts from the repository root. `dashboard/requirements.txt` supplies the Python dependencies. Select an available app subdomain in Streamlit Cloud, then verify the resulting URL before adding it to the portfolio.
 
-The portfolio's `NEXT_PUBLIC_PLACEMENT_DEMO_URL` setting enables the live-app buttons on the homepage and `/projects/patient-placement`. Without that setting, the case study and source links remain available. No placeholder URL is advertised as a live demo.
+The live app is https://clinical-analytics-dash.streamlit.app. The portfolio links to this verified URL from its homepage and `/projects/patient-placement`; `NEXT_PUBLIC_PLACEMENT_DEMO_URL` can optionally override the default in `lib/site.ts`.
 
 Official guide: https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy
 
