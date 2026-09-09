@@ -29,7 +29,7 @@ export const siteConfig = {
   role: "Clinical Analytics & Data Science",
   title: "Josh Homan — Clinical Analytics & Data Science",
   description:
-    "Registered nurse with twelve years at the bedside, now working in clinical analytics and data science. Healthcare data projects and quantitative research.",
+    "Registered nurse with twelve years at the bedside, now working in clinical analytics and data science. Healthcare data projects and clinical AI evaluation.",
   url: resolveSiteUrl(),
   email: "joshdhoman@gmail.com",
   githubUrl: "https://github.com/Joshdhoman",
