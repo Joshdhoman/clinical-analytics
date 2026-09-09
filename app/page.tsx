@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 
 const transferCenterFocus = [
@@ -49,6 +50,8 @@ type Project = {
   href: string;
   /** Set when the project is deployed somewhere a visitor can use it. */
   demoHref?: string;
+  /** Set when the project has a write-up on this site. */
+  caseStudyHref?: string;
   tags: string[];
 };
 
@@ -60,6 +63,7 @@ const projects: Project[] = [
       "Turns an unstructured transfer referral into a reviewable summary and a provisional routing suggestion. Rule-based NLP extracts sixteen fields and shows the source text as evidence for each one, flags what is missing or contradictory, and an interpretable decision tree offers a second opinion. A coordinator confirms or overrides every suggestion, and the decision is written to an audit log.",
     href: siteConfig.transferAssistantUrl,
     demoHref: siteConfig.transferAssistantDemoUrl,
+    caseStudyHref: "/projects/transfer-assistant",
     tags: [
       "NLP",
       "Interpretable ML",
@@ -162,13 +166,21 @@ export default function Home() {
                     Open the live app
                   </a>
                 ) : null}
+                {project.caseStudyHref ? (
+                  <Link
+                    href={project.caseStudyHref}
+                    className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+                  >
+                    Read the case study
+                  </Link>
+                ) : null}
                 <a
                   href={project.href}
                   target="_blank"
                   rel="noreferrer"
                   className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
                 >
-                  {project.demoHref ? "Source and methodology" : "View project"}
+                  {project.demoHref ? "Source" : "View project"}
                 </a>
               </p>
             </article>
