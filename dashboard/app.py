@@ -1,398 +1,242 @@
-"""
-Transfer Center vs. Emergency Department dashboard (Epic-oriented).
-
-Run:
-    pip install -r requirements.txt
-    streamlit run app.py
-
-On first run it auto-generates a synthetic Epic-shaped extract into
-data/transfer_center_encounters.csv. Delete that file to regenerate.
-
-Visual system: THQ Exhibit Style, light / warm-paper base
-(see THQ_EXHIBIT_STYLE_GUIDE.md) — editorial, restrained, hairline rules,
-serif headline, monospace numerals. No stat cards, borders, or shadows.
-"""
-
-from __future__ import annotations
-
-import os
-
+"""Patient placement analytics: reproducible, synthetic portfolio demonstration."""
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
-import data_generator
+from analytics import (ED, TRANSFER, SOURCES, LEVELS, cohort_mix, filter_cohort,
+                       los_by_level, monthly_volume, prepare, source_summary)
+from data_generator import generate, SERVICES
 
-# --- THQ Exhibit Style: light theme tokens (style guide §4) ---------------
-BG = "#f6f4ef"     # warm paper canvas
-PANEL = "#efeae0"  # sidebar / secondary surface
-INK = "#141c26"    # headline line 1, key numbers
-SEC = "#4b5867"    # deck copy, axis labels
-MUT = "#8b95a2"    # eyebrow, footer, muted annotations
-RULE = "#e2ddd2"   # hairlines, chart spines
-A1 = "#0f8f83"     # primary series / primary claim (deep teal)
-A2 = "#a9781a"     # secondary / contrast series (gold)
-STEEL = "#5c7086"  # neutral marks
-GRID = "#ece7db"   # faint chart gridlines
-DASH = "#c7c0b2"   # reference / threshold lines
-
-# Qualitative order is fixed so multi-series charts read as a system (§5).
-ACCENTS = ["#0f8f83", "#a9781a", "#b04a5c", "#5c66c2", "#5f8f52"]
-
-# Font stacks. Numbers are always monospace, no exceptions (§3).
-SERIF = "'Lora', Georgia, 'Times New Roman', serif"
-SANS = "-apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif"
-MONO = "ui-monospace, 'SF Mono', 'DejaVu Sans Mono', Menlo, Consolas, monospace"
-
-SOURCE_COLORS = {
-    "Transfer Center (External Facility)": A1,
-    "Emergency Department": A2,
-}
-LEVEL_ORDER = ["ICU", "Stepdown / Intermediate", "Telemetry", "Med-Surg / Acute"]
-
-DATA_PATH = "data/transfer_center_encounters.csv"
-
-st.set_page_config(
-    page_title="Transfer Center | Patient Placement Analytics",
-    page_icon=":material/monitor_heart:",
-    layout="wide",
-)
-
-# --- CSS: carry the THQ system into Streamlit's chrome -------------------
-st.markdown(
-    f"""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&display=swap');
-
-    .stApp {{ background-color: {BG}; }}
-    section[data-testid="stSidebar"] {{
-        background-color: {PANEL};
-        border-right: 1px solid {RULE};
-    }}
-    .block-container {{ padding-top: 2.4rem; max-width: 1200px; }}
-
-    /* Body / deck / labels: Helvetica-like sans (§3) */
-    html, body, .stApp, .stApp p, .stApp label, .stApp span, .stApp li,
-    [data-testid="stMarkdownContainer"] {{
-        font-family: {SANS};
-        color: {INK};
-    }}
-
-    /* Section titles: serif, restrained (§3) */
-    .stApp h1, .stApp h2, .stApp h3, .stApp h4 {{
-        font-family: {SERIF};
-        color: {INK};
-        font-weight: 600;
-        letter-spacing: 0;
-    }}
-    .stApp h2 {{ font-size: 1.3rem; margin: 0.6rem 0 0.2rem; }}
-    .stApp h3 {{ font-size: 1.05rem; }}
-
-    /* Masthead: eyebrow row, hairline, two-line serif headline, deck */
-    .thq-eyebrow {{
-        display: flex; justify-content: space-between;
-        font-family: {MONO}; font-size: 0.70rem; font-weight: 600;
-        letter-spacing: 0.28em; text-transform: uppercase; color: {MUT};
-    }}
-    .thq-rule {{ border: 0; border-top: 1px solid {RULE}; margin: 0.55rem 0 1.1rem; }}
-    .thq-headline {{
-        font-family: {SERIF}; font-size: 2.0rem; line-height: 1.18;
-        font-weight: 600; color: {INK}; margin: 0;
-    }}
-    .thq-headline .l2 {{ color: {A1}; }}
-    .thq-deck {{
-        color: {SEC}; font-size: 0.97rem; line-height: 1.5;
-        max-width: 66ch; margin-top: 0.55rem;
-    }}
-
-    /* KPI strip: no cards, no borders, no shadows — hairline-topped blocks
-       with monospace numerals (§1, §3) */
-    .kpi-label {{
-        color: {MUT}; font-size: 0.68rem; font-weight: 600;
-        letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.35rem;
-    }}
-    .kpi-value {{
-        color: {INK}; font-family: {MONO};
-        font-size: 1.55rem; font-weight: 500; line-height: 1.1; letter-spacing: -0.01em;
-    }}
-    /* Two-cohort comparison: one row per source, colour-keyed to the charts */
-    .kpi-pair {{ display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.15rem; }}
-    .kpi-pair .num {{
-        font-family: {MONO}; font-size: 1.4rem; font-weight: 500;
-        line-height: 1.2; letter-spacing: -0.01em;
-    }}
-    .kpi-pair .tag {{
-        font-family: {SANS}; font-size: 0.63rem; font-weight: 600;
-        letter-spacing: 0.12em; text-transform: uppercase;
-    }}
-    .kpi-sub {{ color: {SEC}; font-size: 0.77rem; margin-top: 0.35rem; }}
-
-    /* Monospace numerals in the detail table */
-    [data-testid="stDataFrame"] {{ font-family: {MONO}; }}
-
-    .thq-foot {{
-        color: {MUT}; font-size: 0.74rem; letter-spacing: 0.02em;
-        border-top: 1px solid {RULE}; padding-top: 0.8rem; margin-top: 1.6rem;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.set_page_config(page_title="Patient placement | Josh Homan", page_icon=":material/monitor_heart:", layout="wide")
+COLORS = {TRANSFER: "#2f6f4e", ED: "#71869b"}
+SHORT_LEVELS = {"ICU": "ICU", "Stepdown / Intermediate": "Stepdown", "Telemetry": "Telemetry", "Med-Surg / Acute": "Med-surg"}
 
 
-@st.cache_data
-def load_data() -> pd.DataFrame:
-    if not os.path.exists(DATA_PATH):
-        os.makedirs("data", exist_ok=True)
-        data_generator.generate().to_csv(DATA_PATH, index=False)
-    df = pd.read_csv(DATA_PATH, parse_dates=["admit_datetime", "discharge_datetime"])
-    df["admit_month"] = df["admit_datetime"].dt.to_period("M").dt.to_timestamp()
-    return df
+@st.cache_data(max_entries=1)
+def load_data():
+    # Always generate the public demo in memory. Never publish a local extract.
+    return prepare(generate())
 
 
-def style_fig(fig: go.Figure, height: int = 360) -> go.Figure:
+def plot(fig, height=340, left_margin=60):
     fig.update_layout(
-        paper_bgcolor=BG,
-        plot_bgcolor=BG,
-        colorway=ACCENTS,
-        font=dict(color=SEC, family=SANS, size=13),
-        margin=dict(l=8, r=8, t=34, b=8),
-        height=height,
-        legend=dict(
-            orientation="h", yanchor="bottom", y=1.02, x=0,
-            font=dict(family=SANS, size=12, color=SEC),
-        ),
+        height=height, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Arial, sans-serif", size=12, color="#53645a"),
+        margin=dict(l=left_margin, r=18, t=16, b=65), legend_title_text="",
+        legend=dict(orientation="h", y=-.22, x=0),
+        hoverlabel=dict(bgcolor="white"), bargap=.28,
     )
-    axis = dict(
-        gridcolor=GRID,
-        zerolinecolor=RULE,
-        linecolor=RULE,
-        tickfont=dict(family=MONO, size=11, color=MUT),  # numbers are mono (§3)
-        title_font=dict(family=SANS, size=12, color=SEC),
-    )
-    fig.update_xaxes(**axis)
-    fig.update_yaxes(**axis)
-    return fig
+    fig.update_xaxes(gridcolor="#e5ebe5", zeroline=False, title_font_size=12)
+    fig.update_yaxes(gridcolor="#e5ebe5", zeroline=False, title_font_size=12, automargin=True)
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False}, theme=None)
 
+
+def fmt(value, suffix="", digits=1):
+    return "—" if pd.isna(value) else f"{value:,.{digits}f}{suffix}"
+
+
+def reset_filters():
+    for key in ("services", "levels", "classes", "dates", "search", "detail_source"):
+        st.session_state.pop(key, None)
+
+
+def mix_chart(frame, field, categories, height=340):
+    mix = cohort_mix(frame, field, categories)
+    if field == "level_of_care":
+        mix[field] = mix[field].map(SHORT_LEVELS)
+        categories = [SHORT_LEVELS[x] for x in categories]
+    fig = px.bar(mix, x="share", y=field, color="source", orientation="h",
+                 barmode="group", color_discrete_map=COLORS,
+                 category_orders={field: categories, "source": SOURCES},
+                 custom_data=["encounters"], labels={"share": "Share of each source (%)", field: ""})
+    fig.update_traces(hovertemplate="%{y}<br>%{x:.1f}% · %{customdata[0]:,} encounters<extra>%{fullData.name}</extra>")
+    plot(fig, height, left_margin=190 if field == "hospital_service" else 85)
+
+
+st.caption("JOSH HOMAN  /  CLINICAL ANALYTICS  /  01")
+st.title("Patient placement, in perspective.")
+st.write("Compare **transfer-center** and **emergency department** admissions. Explore who arrives, the care they need, and how long they stay.")
+with st.container(horizontal=True, gap="small"):
+    st.badge("Synthetic data", icon=":material/science:", color="green")
+    st.caption("6,000 fictional encounters · Jan–Dec 2025 · No real patient records")
 
 df = load_data()
-
-# --- Masthead ------------------------------------------------------------
-st.markdown(
-    """
-    <div class="thq-eyebrow"><span>The Homan Quant</span><span>Patient Placement</span></div>
-    <hr class="thq-rule"/>
-    <div class="thq-headline">Transfer Center vs. Emergency Department<br/>
-      <span class="l2">inpatient placement analytics</span></div>
-    <div class="thq-deck">Encounters that arrive through the transfer center (external
-      facility transfers) compared against emergency department admits, across hospital
-      service, level of care, and length of stay.</div>
-    """,
-    unsafe_allow_html=True,
-)
-st.markdown("<hr class='thq-rule'/>", unsafe_allow_html=True)
-
-# --- Sidebar filters ---------------------------------------------------
+min_date, max_date = pd.Timestamp("2025-01-01").date(), pd.Timestamp("2025-12-31").date()
 with st.sidebar:
-    st.header("Filters")
-    services = st.multiselect(
-        "Hospital service", sorted(df["hospital_service"].unique()),
-        default=sorted(df["hospital_service"].unique()),
-    )
-    levels = st.multiselect(
-        "Level of care", LEVEL_ORDER, default=LEVEL_ORDER,
-    )
-    pclass = st.multiselect(
-        "Patient class", sorted(df["patient_class"].unique()),
-        default=sorted(df["patient_class"].unique()),
-    )
-    min_d = df["admit_datetime"].min().date()
-    max_d = df["admit_datetime"].max().date()
-    date_range = st.date_input(
-        "Admit date range", value=(min_d, max_d),
-        min_value=min_d, max_value=max_d,
-    )
-    st.caption("Synthetic data. No real PHI. See README for Epic field mapping.")
+    st.subheader(":material/monitor_heart: Placement analytics")
+    st.caption("A clinical operations workbench")
+    view = st.radio("Explore", ["Overview", "Care mix", "Length of stay", "Encounter explorer", "Methods"], key="view")
+    st.divider()
+    st.markdown("**Define your cohort**")
+    dates = st.date_input("Admission dates", value=(min_date, max_date), min_value=min_date, max_value=max_date, key="dates")
+    with st.expander("Hospital services", expanded=False):
+        services = st.multiselect("Include services", sorted(SERVICES), default=sorted(SERVICES), key="services")
+    with st.expander("Levels of care", expanded=False):
+        levels = st.multiselect("Include care levels", LEVELS, default=LEVELS, key="levels")
+    classes = st.pills("Patient class", ["Inpatient", "Observation"], selection_mode="multi", default=["Inpatient", "Observation"], key="classes")
+    st.button("Reset filters", icon=":material/restart_alt:", on_click=reset_filters, width="stretch")
+    st.caption("Filters apply across every analytical view. Length of stay is measured over the full encounter.")
+    st.link_button("Source & documentation", "https://github.com/Joshdhoman/clinical-analytics/tree/main/dashboard", icon=":material/code:")
 
-# Apply filters
-f = df[
-    df["hospital_service"].isin(services)
-    & df["level_of_care"].isin(levels)
-    & df["patient_class"].isin(pclass)
-].copy()
-if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
-    lo, hi = pd.Timestamp(date_range[0]), pd.Timestamp(date_range[1]) + pd.Timedelta(days=1)
-    f = f[(f["admit_datetime"] >= lo) & (f["admit_datetime"] < hi)]
-
-if f.empty:
-    st.warning("No encounters match the current filters. Widen the selection.")
+if view == "Methods":
+    st.header("How to read this dashboard")
+    st.write("This is a reproducible analytics demonstration. All encounters are generated with a fixed seed; differences between sources are simulation assumptions, not findings about a real hospital.")
+    with st.expander("Cohorts and denominators", expanded=True):
+        st.markdown("""
+- **Transfer center:** admissions from a fictional external facility. **Emergency department:** admissions through the ED.
+- **Transfer share:** transfer encounters divided by all filtered encounters. Both inpatient and observation encounters are included unless filtered out.
+- **Care and service mix:** percentages within each admission source, after all filters. ICU share also uses each source's filtered cohort as its denominator.
+- **Median LOS gap:** transfer median minus ED median. Missing cohorts display an em dash, never a false zero.
+- **Encounter bed-days:** sum of full encounter LOS, including days after the selected admission window. This is not occupied beds or census within that window.
+- **Monthly volumes:** count by admission month; months with no encounters appear as zero. Boundary months may be partial.
+""")
+    with st.expander("Simulation and analytical limits", expanded=True):
+        st.write("6,000 adult encounters are generated for 2025 using NumPy seed 42. Transfers have a 27% sampling probability and a higher ICU probability. LOS follows a right-skewed log-normal distribution with a deliberately higher transfer mean at each level of care. Service and care level are sampled independently; these combinations are not a validated clinical model.")
+        st.write("Comparing within a level of care describes case mix but does not fully adjust for acuity. Diagnosis, severity, comorbidities, treatment, discharge barriers, and prior-facility days are not modeled. No causal effects, real-world benchmarks, or operational savings can be inferred. Small subgroups are descriptive and can be unstable.")
+        st.write("Each encounter has one synthetic care-level label, not a history of bed movements. All generated encounters are discharged; there is no censoring of ongoing stays. Referring facility names are fictional.")
+    with st.expander("Epic-oriented data dictionary"):
+        st.caption("Conceptual reporting fields only. Actual tables, joins, codes, and definitions require validation against the institution's licensed data dictionary; no Epic integration is implemented.")
+        st.dataframe(pd.DataFrame([
+            ["encounter_csn", "Synthetic encounter identifier", "Hospital encounter record"],
+            ["admission_source", "Transfer center or ED", "Admission origin / transfer workflow"],
+            ["hospital_service", "Assigned service line", "Hospital service / treatment team"],
+            ["level_of_care", "Single encounter care category", "ADT accommodation / bed movements"],
+            ["patient_class", "Inpatient or observation", "Encounter patient class"],
+            ["admit_datetime / discharge_datetime", "Encounter timestamps", "Hospital admission / discharge"],
+            ["los_days", "Full stay in days", "Discharge minus admission, rounded"],
+            ["referring_facility", "Fictional transferring hospital", "Transfer workflow facility"],
+        ], columns=["Field", "Meaning", "Reporting concept"]), hide_index=True, width="stretch")
     st.stop()
 
-# --- KPI row ----------------------------------------------------------
-total = len(f)
-xfer = f[f["admission_source"] == "Transfer Center (External Facility)"]
-ed = f[f["admission_source"] == "Emergency Department"]
-xfer_pct = len(xfer) / total * 100 if total else 0
-median_los_xfer = xfer["los_days"].median() if len(xfer) else 0
-median_los_ed = ed["los_days"].median() if len(ed) else 0
-icu_rate_xfer = (xfer["level_of_care"] == "ICU").mean() * 100 if len(xfer) else 0
-icu_rate_ed = (ed["level_of_care"] == "ICU").mean() * 100 if len(ed) else 0
+if len(dates) != 2:
+    st.info("Choose both a start and an end date to update the cohort.", icon=":material/date_range:")
+    st.stop()
+f = filter_cohort(df, services, levels, classes, dates)
+if f.empty:
+    st.info("No encounters match these filters. Add a service, level of care, or patient class, or reset the filters.", icon=":material/filter_alt_off:")
+    st.stop()
+summary = source_summary(f)
+tc, ed = summary.loc[TRANSFER], summary.loc[ED]
+gap = tc.median_los - ed.median_los
+volume = monthly_volume(f, dates)
+st.caption(f"{dates[0]:%b %d, %Y} – {dates[1]:%b %d, %Y}  ·  {len(f):,} of {len(df):,} encounters  ·  {len(services)} services  ·  {', '.join(classes)}")
 
+with st.container():
+    metrics = [
+        ("Encounters", f"{len(f):,}", f"{int(tc.encounters):,} transfer · {int(ed.encounters):,} ED"),
+        ("Transfer share", f"{tc.encounters / len(f):.1%}", "Of all selected encounters"),
+        ("Median LOS gap", fmt(gap, " d"), "Transfer minus ED · unadjusted"),
+        ("Encounter bed-days", f"{f.los_days.sum():,.0f}", "Full stays for selected admissions"),
+    ]
+    for column, (label, value, detail) in zip(st.columns(4), metrics):
+        with column.container(border=True):
+            st.metric(label, value)
+            st.caption(detail)
 
-def kpi(col, label, value, sub):
-    col.markdown(
-        f"<div class='kpi-label'>{label}</div>"
-        f"<div class='kpi-value'>{value}</div>"
-        f"<div class='kpi-sub'>{sub}</div>",
-        unsafe_allow_html=True,
-    )
+if (summary.encounters == 0).any():
+    st.warning("Only one admission source is represented. Cross-source LOS comparisons are unavailable for this selection.")
+elif summary.encounters.min() < 30:
+    st.caption("Small cohort: at least one source has fewer than 30 encounters. Interpret descriptive comparisons cautiously.")
 
+if view == "Overview":
+    with st.container(border=True):
+        st.subheader("The comparison needs context")
+        if pd.notna(gap):
+            direction = "longer" if gap >= 0 else "shorter"
+            st.write(f"Transfer admissions have a **{abs(gap):.1f}-day {direction} median stay** in this selection. ICU represents **{fmt(tc.icu_share, '%')}** of transfers and **{fmt(ed.icu_share, '%')}** of ED admissions.")
+            st.caption("Read the care mix alongside the LOS gap. The Length of stay view compares within care levels; it is not a full risk adjustment.")
+        else:
+            st.write("Include both admission sources to compare length of stay and care mix.")
+    left, right = st.columns([3, 2], gap="medium")
+    with left:
+        st.subheader("Admissions over time")
+        st.caption("Monthly encounter counts · selected admission dates")
+        fig = px.line(volume, x="admit_month", y="encounters", color="source", markers=True,
+                      color_discrete_map=COLORS, category_orders={"source": SOURCES},
+                      labels={"admit_month": "", "encounters": "Encounters"})
+        fig.update_traces(line_width=3, marker_size=7, hovertemplate="%{x|%b %Y}<br>%{y:,} encounters<extra>%{fullData.name}</extra>")
+        fig.update_xaxes(dtick="M2", tickformat="%b")
+        plot(fig)
+    with right:
+        st.subheader("Where care is delivered")
+        st.caption("Share within each admission source")
+        mix_chart(f, "level_of_care", [x for x in LEVELS if x in levels])
+    st.subheader("Two routes into the hospital")
+    comparison = summary.reset_index().rename(columns={"source": "Admission source", "encounters": "Encounters", "median_los": "Median LOS", "mean_los": "Mean LOS", "icu_share": "ICU share", "bed_days": "Encounter bed-days"})
+    st.dataframe(comparison, hide_index=True, width="stretch", column_config={
+        "Median LOS": st.column_config.NumberColumn(format="%.1f d"),
+        "Mean LOS": st.column_config.NumberColumn(format="%.1f d"),
+        "ICU share": st.column_config.NumberColumn(format="%.1f%%"),
+        "Encounter bed-days": st.column_config.NumberColumn(format="%.0f"),
+    })
 
-def kpi2(col, label, v_xfer, v_ed, sub):
-    """Comparison KPI: transfer on top in teal, ED below in gold — same
-    colour key as every chart legend, so the two numbers are unambiguous."""
-    col.markdown(
-        f"<div class='kpi-label'>{label}</div>"
-        f"<div class='kpi-pair'><span class='num' style='color:{A1}'>{v_xfer}</span>"
-        f"<span class='tag' style='color:{A1}'>transfer</span></div>"
-        f"<div class='kpi-pair'><span class='num' style='color:{A2}'>{v_ed}</span>"
-        f"<span class='tag' style='color:{A2}'>ED</span></div>"
-        f"<div class='kpi-sub'>{sub}</div>",
-        unsafe_allow_html=True,
-    )
+elif view == "Care mix":
+    st.header("Different routes. Different care needs.")
+    st.caption("Percentages use each source's selected cohort as the denominator. Hover for encounter counts.")
+    left, right = st.columns([3, 2], gap="medium")
+    with left:
+        st.subheader("Service-line composition")
+        order = f.hospital_service.value_counts().index.tolist()
+        mix_chart(f, "hospital_service", order, 510)
+    with right:
+        st.subheader("Level-of-care composition")
+        mix_chart(f, "level_of_care", [x for x in LEVELS if x in levels], 370)
+        st.caption("Care level is one descriptive category per encounter. It does not capture changes in acuity during a stay.")
+    st.subheader("The transfer network")
+    facilities = f[f.source.eq(TRANSFER)].groupby("referring_facility").agg(Encounters=("los_days", "size"), Median_LOS=("los_days", "median")).reset_index().sort_values("Encounters", ascending=False)
+    if facilities.empty:
+        st.info("No transfer encounters in this selection.")
+    else:
+        st.dataframe(facilities.rename(columns={"referring_facility": "Referring facility", "Median_LOS": "Median LOS"}), hide_index=True, width="stretch", column_config={"Median LOS": st.column_config.NumberColumn(format="%.1f d")})
+        st.caption("Fictional facilities; counts describe selected admissions, not referral conversion rates.")
 
+elif view == "Length of stay":
+    st.header("Compare within a level of care.")
+    st.write("A single overall median can obscure differences in care mix. Start with the medians below, then inspect the spread and subgroup sizes.")
+    med = los_by_level(f)
+    med["care"] = med.level_of_care.map(SHORT_LEVELS)
+    order = [SHORT_LEVELS[x] for x in LEVELS if x in levels]
+    left, right = st.columns(2, gap="medium")
+    with left:
+        st.subheader("Median stay")
+        fig = px.bar(med, x="care", y="median_los", color="source", barmode="group", color_discrete_map=COLORS,
+                     category_orders={"care": order, "source": SOURCES}, custom_data=["encounters"],
+                     labels={"care": "", "median_los": "Median LOS (days)"})
+        fig.update_traces(hovertemplate="%{x}<br>%{y:.1f} days · n=%{customdata[0]:,}<extra>%{fullData.name}</extra>")
+        plot(fig, 390)
+    with right:
+        st.subheader("Spread of stays")
+        fig = px.box(f.assign(care=f.level_of_care.map(SHORT_LEVELS)), x="care", y="los_days", color="source", color_discrete_map=COLORS,
+                     category_orders={"care": order, "source": SOURCES}, points=False,
+                     labels={"care": "", "los_days": "LOS (days)"})
+        plot(fig, 390)
+        st.caption("Box: middle 50%. Line: median. Whiskers: values within 1.5× IQR. Individual outlier markers are hidden; all stays contribute to the calculations.")
+    st.subheader("Check the denominators")
+    st.dataframe(med.drop(columns="care").rename(columns={"level_of_care": "Level of care", "source": "Admission source", "median_los": "Median LOS", "encounters": "Encounters", "p90_los": "90th percentile LOS"}), hide_index=True, width="stretch", column_config={"Median LOS": st.column_config.NumberColumn(format="%.1f d"), "90th percentile LOS": st.column_config.NumberColumn(format="%.1f d")})
+    st.caption("Stratification is descriptive, not causal or fully risk-adjusted. Differences are intentionally built into the synthetic generator.")
 
-c1, c2, c3, c4 = st.columns(4)
-kpi(c1, "Total encounters", f"{total:,}",
-    f"<span style='color:{A1}'>{len(xfer):,} transfer</span> &middot; "
-    f"<span style='color:{A2}'>{len(ed):,} ED</span>")
-kpi(c2, "Via transfer center", f"{xfer_pct:.0f}%", "share of inpatient admits")
-kpi2(c3, "Median LOS", f"{median_los_xfer:.1f}d", f"{median_los_ed:.1f}d",
-     "unadjusted for case mix")
-kpi2(c4, "ICU level of care", f"{icu_rate_xfer:.0f}%", f"{icu_rate_ed:.0f}%",
-     "share of each source's encounters")
+elif view == "Encounter explorer":
+    st.header("From the pattern to the encounter.")
+    with st.container(horizontal=True, vertical_alignment="bottom"):
+        search = st.text_input("Find an encounter or facility", placeholder="Encounter ID or referring facility", key="search", width=400)
+        selected_source = st.selectbox("Admission source", ["Both sources"] + SOURCES, key="detail_source", width=250)
+    detail = f.copy()
+    if selected_source != "Both sources":
+        detail = detail[detail.source.eq(selected_source)]
+    if search.strip():
+        query = search.strip()
+        detail = detail[detail.encounter_csn.astype(str).str.contains(query, regex=False) | detail.referring_facility.fillna("").str.contains(query, case=False, regex=False)]
+    columns = ["encounter_csn", "patient_age", "admission_source", "referring_facility", "hospital_service", "level_of_care", "patient_class", "admit_datetime", "discharge_datetime", "los_days"]
+    detail = detail[columns].sort_values("admit_datetime", ascending=False)
+    st.caption(f"{len(detail):,} matching encounters · search and source selection also apply to the download")
+    st.download_button("Download these encounters", detail.to_csv(index=False).encode("utf-8"), file_name="synthetic_placement_encounters.csv", mime="text/csv", icon=":material/download:", disabled=detail.empty, on_click="ignore")
+    st.dataframe(detail, hide_index=True, width="stretch", height=480, column_config={
+        "encounter_csn": st.column_config.NumberColumn("Encounter", format="%d"),
+        "patient_age": "Age", "admission_source": "Admission source", "referring_facility": "Referring facility",
+        "hospital_service": "Hospital service", "level_of_care": "Level of care", "patient_class": "Patient class",
+        "admit_datetime": st.column_config.DatetimeColumn("Admitted", format="MMM DD, YYYY HH:mm"),
+        "discharge_datetime": st.column_config.DatetimeColumn("Discharged", format="MMM DD, YYYY HH:mm"),
+        "los_days": st.column_config.NumberColumn("LOS", format="%.2f d"),
+    })
 
-st.markdown("<hr class='thq-rule'/>", unsafe_allow_html=True)
-
-# --- Row 1: volume trend + level of care mix -------------------------
-r1c1, r1c2 = st.columns([3, 2])
-
-with r1c1:
-    st.subheader("Monthly volume by admission source")
-    vol = (
-        f.groupby(["admit_month", "admission_source"])
-        .size().reset_index(name="encounters")
-    )
-    fig = px.line(
-        vol, x="admit_month", y="encounters", color="admission_source",
-        color_discrete_map=SOURCE_COLORS, markers=True,
-    )
-    fig.update_layout(legend_title_text="", xaxis_title="", yaxis_title="Encounters")
-    st.plotly_chart(style_fig(fig), width="stretch")
-
-with r1c2:
-    st.subheader("Level of care mix")
-    loc = (
-        f.groupby(["admission_source", "level_of_care"])
-        .size().reset_index(name="n")
-    )
-    loc["pct"] = loc.groupby("admission_source")["n"].transform(lambda s: s / s.sum() * 100)
-    fig = px.bar(
-        loc, x="pct", y="level_of_care", color="admission_source",
-        orientation="h", barmode="group", color_discrete_map=SOURCE_COLORS,
-        category_orders={"level_of_care": LEVEL_ORDER},
-    )
-    fig.update_layout(legend_title_text="", xaxis_title="% of source cohort", yaxis_title="")
-    st.plotly_chart(style_fig(fig), width="stretch")
-
-# --- Row 2: service line mix ----------------------------------------
-st.subheader("Service line mix by admission source")
-svc = f.groupby(["hospital_service", "admission_source"]).size().reset_index(name="n")
-svc["pct"] = svc.groupby("admission_source")["n"].transform(lambda s: s / s.sum() * 100)
-fig = px.bar(
-    svc, x="hospital_service", y="pct", color="admission_source",
-    barmode="group", color_discrete_map=SOURCE_COLORS,
-)
-fig.update_layout(legend_title_text="", xaxis_title="", yaxis_title="% of source cohort")
-fig.update_xaxes(tickangle=-35)
-st.plotly_chart(style_fig(fig, height=420), width="stretch")
-
-# --- Row 3: the key LOS view, stratified by level of care ------------
-st.subheader("Length of stay: the comparison that controls for acuity")
-st.markdown(
-    "<div class='thq-deck'>Transfers run higher acuity, so an overall LOS gap is partly "
-    "just case mix. Stratifying by level of care shows whether transfers stay longer "
-    "<i>at the same level of care</i>.</div>",
-    unsafe_allow_html=True,
-)
-st.write("")
-
-r3c1, r3c2 = st.columns(2)
-
-with r3c1:
-    st.markdown("#### Median LOS by level of care")
-    med = (
-        f.groupby(["level_of_care", "admission_source"])["los_days"]
-        .median().reset_index()
-    )
-    fig = px.bar(
-        med, x="level_of_care", y="los_days", color="admission_source",
-        barmode="group", color_discrete_map=SOURCE_COLORS,
-        category_orders={"level_of_care": LEVEL_ORDER},
-    )
-    fig.update_layout(legend_title_text="", xaxis_title="", yaxis_title="Median LOS (days)")
-    st.plotly_chart(style_fig(fig), width="stretch")
-
-with r3c2:
-    st.markdown("#### LOS distribution (box plot)")
-    fig = px.box(
-        f, x="level_of_care", y="los_days", color="admission_source",
-        color_discrete_map=SOURCE_COLORS,
-        category_orders={"level_of_care": LEVEL_ORDER},
-    )
-    fig.update_layout(legend_title_text="", xaxis_title="", yaxis_title="LOS (days)")
-    st.plotly_chart(style_fig(fig), width="stretch")
-
-# --- Detail table + download ---------------------------------------
-with st.expander("Encounter-level detail and download"):
-    show = f[[
-        "encounter_csn", "patient_age", "admission_source", "referring_facility",
-        "hospital_service", "level_of_care", "patient_class",
-        "admit_datetime", "discharge_datetime", "los_days",
-    ]].sort_values("admit_datetime", ascending=False)
-    st.dataframe(show, width="stretch", height=320)
-    st.download_button(
-        "Download filtered extract (CSV)",
-        show.to_csv(index=False).encode("utf-8"),
-        file_name="transfer_center_filtered.csv",
-        mime="text/csv",
-    )
-
-with st.expander("Epic data mapping (where these fields come from)"):
-    st.markdown(
-        """
-This demo runs on a synthetic extract, but every column maps to a real Epic
-reporting concept so it would plug into a live pull with minimal remapping:
-
-| Dashboard field | Epic source (Clarity / Caboodle) |
-|---|---|
-| `encounter_csn` | `PAT_ENC_HSP.PAT_ENC_CSN_ID` (Contact Serial Number) |
-| `admission_source` | Admission source / point of origin; transfer center flag from the Transfer Center (Grand Central) module |
-| `hospital_service` | `CLARITY_ADT` / hospital service (treatment team) |
-| `level_of_care` | Bed / accommodation level of care from ADT bed movements |
-| `patient_class` | `PAT_ENC_HSP` patient class (Inpatient vs Observation) |
-| `admit_datetime` / `discharge_datetime` | `PAT_ENC_HSP.HOSP_ADMSN_TIME` / `HOSP_DISCH_TIME` |
-| `los_days` | Derived: discharge minus admit |
-| `referring_facility` | Transferring facility captured in the transfer center workflow |
-
-In Caboodle, the same lives in dimensional form (e.g. `HospitalAdmissionFact`
-with `AdmissionSourceDim`, `DepartmentDim`, and date dimensions).
-        """
-    )
-
-st.markdown(
-    "<div class='thq-foot'>The Homan Quant &middot; synthetic demonstration data "
-    "&middot; not for clinical use</div>",
-    unsafe_allow_html=True,
-)
+st.caption("Built by Josh Homan · Synthetic demonstration · Not for clinical use")

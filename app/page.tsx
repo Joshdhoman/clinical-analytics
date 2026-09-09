@@ -16,7 +16,7 @@ const transferCenterFocus = [
   },
   {
     label: "Mapping",
-    detail: "Every field traced to its Epic Clarity / Caboodle source.",
+    detail: "A documented, Epic-oriented field dictionary and explicit analytical limits.",
   },
 ];
 
@@ -73,11 +73,13 @@ const projects: Project[] = [
     ],
   },
   {
-    title: "Transfer Center vs. Emergency Department",
+    title: "Patient Placement Analytics",
     type: "Patient placement analytics",
     description:
-      "A clinical operations dashboard comparing transfer-center admissions to emergency department admissions with a sharper lens on acuity and length of stay by level of care.",
+      "An interactive workbench for comparing transfer-center and emergency department admissions. Explore volume, service and care mix, and length of stay within each care level; trace a pattern down to the encounter and export the selected cohort. Built with 6,000 reproducible synthetic encounters and explicit analytical limits.",
     href: siteConfig.dashboardUrl,
+    demoHref: siteConfig.dashboardDemoUrl,
+    caseStudyHref: "/projects/patient-placement",
     tags: ["Streamlit", "Healthcare", "Operational analytics", "Synthetic data"],
   },
 ];

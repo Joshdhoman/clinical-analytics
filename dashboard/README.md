@@ -1,101 +1,72 @@
-# Transfer Center vs. Emergency Department Dashboard
+﻿# Patient Placement Analytics
 
-An Epic-oriented Streamlit dashboard for inpatient patient-placement analytics.
-It compares encounters that arrive through the **Transfer Center** (external
-facility transfers) against those admitted through the **Emergency Department**,
-across three dimensions: **hospital service**, **level of care**, and
-**length of stay (LOS)**.
+A Streamlit portfolio project by Josh Homan, comparing transfer-center and emergency department admissions through volume, care mix, and length of stay.
 
-Built as a portfolio piece sitting at the intersection of bedside operations and
-data science. All data is synthetic. No real PHI is used.
+The public demo always generates 6,000 fictional adult encounters in memory, with a fixed random seed. It does not load local CSV extracts, require secrets, or connect to Epic.
 
-## Why the comparison is built this way
+## Run locally
 
-Transfer-center patients tend to be higher acuity than ED admits, so a raw LOS
-comparison is confounded by case mix. The LOS section therefore **stratifies by
-level of care**, answering the sharper operational question: do transfers stay
-longer *at the same level of care*, or does the overall gap just reflect more
-ICU admissions? That distinction is the analytical core of the dashboard.
-
-## Run it
-
-From inside the project folder, in the VS Code terminal:
+Use Python 3.12 and run from this folder:
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS / Linux
+# Windows: .venv\Scripts\activate
+# macOS / Linux: source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-It opens at http://localhost:8501. Stop it with Ctrl+C.
+Dependencies are pinned to the versions verified in the development environment. The theme lives in `.streamlit/config.toml`.
 
-Use a virtual environment rather than the base Anaconda environment. It keeps
-this project's package versions isolated so a change here cannot break your
-other work. After creating `.venv`, point VS Code at it with Ctrl+Shift+P,
-"Python: Select Interpreter", then pick the one inside `.venv`.
+## Explore
 
-On first launch the app generates a synthetic Epic-shaped extract into
-`data/transfer_center_encounters.csv`. Delete that file to regenerate, or run
-the generator directly:
+- **Overview:** encounter counts, transfer share, median LOS gap, full-encounter bed-days, monthly admissions, and care mix.
+- **Care mix:** percentages within each admission source, service lines, care levels, and fictional referring facilities.
+- **Length of stay:** medians, distributions, subgroup counts, and 90th percentiles within each care level.
+- **Encounter explorer:** literal-text search, source selection, and CSV download of exactly the displayed cohort.
+- **Methods:** metric definitions, simulation assumptions, limitations, and a conceptual Epic-oriented data dictionary.
+
+Global filters cover admission dates (inclusive end date), hospital service, level of care, and patient class. Empty selections show a recoverable message; missing source statistics stay missing rather than becoming zero. Monthly time series include zero-count months.
+
+## Analytical limits
+
+Differences between sources are deliberately encoded in the simulation. The generator uses a 27% transfer probability, source-specific care and service distributions, and right-skewed LOS with a higher transfer mean at each care level. Service and care level are sampled independently. LOS baseline parameters are means before clipping, not medians. Observation status is sampled among shorter stays.
+
+Each encounter has a single care-level label. Comparing within levels provides descriptive context, not complete acuity adjustment, causal evidence, or a validated clinical benchmark. Diagnosis, severity, comorbidities, discharge barriers, prior-facility days, and bed movements are not modeled. All stays are discharged; there is no censoring.
+
+Encounter bed-days sum full stays for admissions in the selected window, including days outside that window. They do not measure daily census, bed occupancy, or staffed capacity. Inpatient and observation encounters are both included by default.
+
+The field dictionary describes reporting concepts. Actual Epic schemas, joins, and code sets must be institutionally validated; no integration or affiliation is claimed.
+
+## Verify
 
 ```bash
-python data_generator.py
+python -m unittest test_dashboard -v
 ```
 
-Verified working on Streamlit 1.62, pandas 3.0, numpy 2.4, plotly 7.0.
-`requirements.txt` carries upper bounds so a future major release cannot
-silently break the app.
+Checks cover reproducibility, timestamp consistency, inclusive end dates, missing cohorts, percentage denominators, zero-count months, every navigation view, empty selections, reset, and search behavior.
 
-## What's in it
+## Publish on Streamlit Community Cloud
 
-- KPI strip: total encounters, transfer-center share, median LOS (transfer vs ED), share of each source's encounters at ICU level of care
-- Monthly volume trend by admission source
-- Level-of-care mix by source
-- Service line mix by source
-- LOS stratified by level of care (median bars + distribution box plots)
-- Filterable encounter-level table with CSV export
-- In-app Epic field-mapping reference
+The portfolio repository contains this app at `dashboard/`. Deploy with:
 
-Filters (service, level of care, patient class, date range) apply to every panel.
+- Repository: `Joshdhoman/clinical-analytics`
+- Branch: `main`
+- Entry point: `dashboard/app.py`
+- Python: **3.12**
+- Secrets: **none**
 
-## Epic data mapping
+The repository-root `.streamlit/config.toml` supplies the same theme when Cloud starts from the repository root. `dashboard/requirements.txt` supplies the Python dependencies. Select an available app subdomain in Streamlit Cloud, then verify the resulting URL before adding it to the portfolio.
 
-The synthetic columns mirror real Epic reporting concepts so the app would plug
-into a live extract with minimal remapping.
+The portfolio's `NEXT_PUBLIC_PLACEMENT_DEMO_URL` setting enables the live-app buttons on the homepage and `/projects/patient-placement`. Without that setting, the case study and source links remain available. No placeholder URL is advertised as a live demo.
 
-| Dashboard field | Epic source (Clarity / Caboodle) |
-|---|---|
-| `encounter_csn` | `PAT_ENC_HSP.PAT_ENC_CSN_ID` (Contact Serial Number) |
-| `admission_source` | Admission source / point of origin; transfer flag from the Transfer Center (Grand Central) module |
-| `hospital_service` | `CLARITY_ADT` / hospital service (treatment team) |
-| `level_of_care` | Bed / accommodation level of care from ADT bed movements |
-| `patient_class` | `PAT_ENC_HSP` patient class (Inpatient vs Observation) |
-| `admit_datetime` / `discharge_datetime` | `PAT_ENC_HSP.HOSP_ADMSN_TIME` / `HOSP_DISCH_TIME` |
-| `los_days` | Derived: discharge minus admit |
-| `referring_facility` | Transferring facility captured in the transfer-center workflow |
+Official guide: https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy
 
-In Caboodle the same data lives in dimensional form, e.g. `HospitalAdmissionFact`
-joined to `AdmissionSourceDim`, `DepartmentDim`, and date dimensions.
+## Files
 
-## Adapting to real data
+- `app.py`: presentation, navigation, filters, and export.
+- `analytics.py`: pure cohort calculations.
+- `data_generator.py`: repeatable simulation. Running it directly optionally writes a synthetic CSV under `data/`; the public app does not read that file.
+- `test_dashboard.py`: calculation and app regression checks.
 
-Swap the generator for your own extract by writing a CSV with the same column
-names to `data/transfer_center_encounters.csv`. Nothing downstream needs to
-change. Keep the extract de-identified and off any shared environment.
-
----
-The Homan Quant · synthetic demonstration data · not for clinical use
-
-## Changelog
-
-**2026-08-28** — Restyled to the THQ Exhibit Style (light / warm-paper base):
-editorial masthead with serif headline, hairline rules instead of stat cards,
-monospace numerals, teal/gold accent pair, warm `#f6f4ef` canvas. No changes to
-the analysis logic.
-
-**2026-08-28** — Compatibility pass against current package versions.
-Replaced the deprecated `use_container_width=True` argument with `width="stretch"`
-(Streamlit deprecated the old form and will remove it). Added version bounds to
-`requirements.txt`. No changes to the analysis logic.
+Synthetic demonstration only. No real patient records. Not for clinical use.

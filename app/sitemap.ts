@@ -5,6 +5,11 @@ import { siteConfig } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
+      url: `${siteConfig.url}/projects/patient-placement`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: siteConfig.url,
       lastModified: new Date(),
       changeFrequency: "monthly",

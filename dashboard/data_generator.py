@@ -17,8 +17,6 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-RNG = np.random.default_rng(42)
-
 # Value sets chosen to look like Epic "Hospital Service" / treatment team names.
 SERVICES = [
     "Hospitalist / General Medicine",
@@ -63,10 +61,8 @@ LEVEL_WEIGHTS = {
     "Emergency Department": np.array([0.12, 0.13, 0.25, 0.50]),
 }
 
-# Median length of stay (days) baseline by level of care. Transfers get a
-# modest additive bump even at the same level of care, because they arrive
-# further into an illness course. The dashboard stratifies by level of care so
-# this real difference is visible rather than hidden by the acuity mix.
+# Mean LOS baselines for this simulation, not estimates of real hospitals.
+# The transfer difference is deliberately encoded for demonstration.
 LOS_BASE = {
     "ICU": 5.2,
     "Stepdown / Intermediate": 3.8,
@@ -76,7 +72,14 @@ LOS_BASE = {
 TRANSFER_LOS_BUMP = 1.25  # extra days at matched level of care
 
 
-def generate(n_encounters: int = 6000, start: str = "2025-01-01", end: str = "2025-12-31") -> pd.DataFrame:
+def generate(n_encounters: int = 6000, start: str = "2025-01-01", end: str = "2025-12-31", seed: int = 42) -> pd.DataFrame:
+    RNG = np.random.default_rng(seed)
+    if n_encounters < 0:
+        raise ValueError("n_encounters must be nonnegative")
+    start_ts = pd.Timestamp(start).normalize()
+    end_ts = pd.Timestamp(end).normalize() + pd.Timedelta(days=1)
+    if end_ts <= start_ts:
+        raise ValueError("end must be on or after start")
     sources = np.array(
         ["Transfer Center (External Facility)", "Emergency Department"]
     )
@@ -92,7 +95,7 @@ def generate(n_encounters: int = 6000, start: str = "2025-01-01", end: str = "20
         level[mask] = RNG.choice(LEVELS, size=k, p=LEVEL_WEIGHTS[s])
 
     # Length of stay: log-normal around a level-of-care baseline, plus a
-    # transfer bump, with mild service-driven noise.
+    # transfer bump. Service and level are sampled independently.
     los = np.empty(n_encounters, dtype=float)
     for i in range(n_encounters):
         base = LOS_BASE[level[i]]
@@ -105,8 +108,6 @@ def generate(n_encounters: int = 6000, start: str = "2025-01-01", end: str = "20
     los = np.clip(np.round(los, 2), 0.25, 60.0)
 
     # Admit timestamps spread across the year; discharge = admit + LOS.
-    start_ts = pd.Timestamp(start)
-    end_ts = pd.Timestamp(end)
     span_seconds = (end_ts - start_ts).total_seconds()
     admit_offsets = RNG.uniform(0, span_seconds, size=n_encounters)
     admit_dt = start_ts + pd.to_timedelta(admit_offsets, unit="s")
@@ -147,6 +148,10 @@ def generate(n_encounters: int = 6000, start: str = "2025-01-01", end: str = "20
 
 
 if __name__ == "__main__":
+    from pathlib import Path
+
+    target = Path(__file__).resolve().parent / "data" / "transfer_center_encounters.csv"
+    target.parent.mkdir(parents=True, exist_ok=True)
     out = generate()
-    out.to_csv("data/transfer_center_encounters.csv", index=False)
-    print(f"Wrote {len(out):,} encounters to data/transfer_center_encounters.csv")
+    out.to_csv(target, index=False)
+    print(f"Wrote {len(out):,} synthetic encounters to {target}")

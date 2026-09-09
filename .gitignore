@@ -58,3 +58,5 @@ dashboard/env/
 dashboard/venv/
 # auto-generated synthetic extract — the app rebuilds this on first run
 dashboard/data/
+.streamlit/secrets.toml
+dashboard/.streamlit/secrets.toml
