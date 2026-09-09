@@ -35,9 +35,13 @@ not reintroduce social links.
 1. **Hero** — Josh, and the nursing + data science combination
 2. **Healthcare analytics** — leads with a transfer center decline prediction
    project
-3. **Quantitative research** — branded data visualizations. Undecided; this
+3. **Clinical AI** — how Josh evaluates whether a model fits clinical work.
+   Deliberately about judgment and approach, not a portfolio of built models;
+   the bedside experience is the credential here. Targets Clinical AI
+   Application Analyst-type roles.
+4. **Quantitative research** — branded data visualizations. Undecided; this
    section was originally scoped around the X audience and may be cut.
-4. **Contact**
+5. **Contact**
 
 Build one section at a time. Josh reviews each before the next starts.
 
@@ -82,11 +86,17 @@ line up in a column (stat readouts, chart labels, table cells).
 ## Status
 
 - Done: scaffold, design tokens, metadata / OG / favicon / robots / sitemap,
-  README, hero, selected work, project focus, contact.
+  README, hero, selected work, project focus, clinical AI, contact.
 - The **decline prediction project** that section 2 is supposed to lead with
   does not exist yet. `dashboard/` is descriptive only — pandas, numpy, plotly,
-  no model. Until that project is built, nothing on the site may be tagged or
-  described as AI, ML, or predictive.
+  no model.
+- The line to hold: stating what Josh is *open to* or how he *evaluates* AI is
+  honest and belongs on the site. Describing a **project** as AI, ML, or
+  predictive when no model exists is not. Do not tag `dashboard/` as AI. When
+  the prediction model ships, it earns those words on its own card.
+- The GitHub repo is **private**, so `repoUrl` / `dashboardUrl` 404 for every
+  visitor. Must be made public before the site goes live, or those links have
+  to change.
 
 ## Checks
 

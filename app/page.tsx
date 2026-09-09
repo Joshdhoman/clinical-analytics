@@ -19,6 +19,29 @@ const transferCenterFocus = [
   },
 ];
 
+const clinicalAiFocus = [
+  {
+    label: "Workflow fit",
+    detail:
+      "Where an alert lands, who is expected to act on it, and what it interrupts.",
+  },
+  {
+    label: "Evaluation",
+    detail:
+      "Calibration and base rates, not AUC alone — what a false positive costs the unit that receives it.",
+  },
+  {
+    label: "Adoption",
+    detail:
+      "Alert fatigue is a model problem, not a staffing problem. Clinicians route around tools they do not trust.",
+  },
+  {
+    label: "Safety and drift",
+    detail:
+      "Documented limits, monitored performance, and a clear answer to who owns the output.",
+  },
+];
+
 const projects = [
   {
     title: "Transfer Center vs. Emergency Department",
@@ -144,14 +167,41 @@ export default function Home() {
 
       <hr className="my-14 border-line sm:my-16" />
 
+      <section id="clinical-ai" className="scroll-mt-20">
+        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
+          Clinical AI
+        </h2>
+
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          A model that scores well in a notebook and a model that changes what a
+          nurse does at three in the morning are two different problems. Twelve
+          years at the bedside is what I bring to the second one — reading
+          whether a prediction fits the work, and whether the people on the
+          receiving end will act on it.
+        </p>
+
+        <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+          {clinicalAiFocus.map(({ label, detail }) => (
+            <div key={label} className="border-t border-line pt-3">
+              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
+                {label}
+              </dt>
+              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <hr className="my-14 border-line sm:my-16" />
+
       <section id="contact" className="scroll-mt-20">
         <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
           Contact
         </h2>
 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Open to clinical analytics and data science roles. The fastest way to
-          reach me is email.
+          Open to clinical analytics, clinical AI, and data science roles. The
+          fastest way to reach me is email.
         </p>
 
         <p className="mt-6">
