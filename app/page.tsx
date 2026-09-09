@@ -95,8 +95,9 @@ export default function Home() {
           {siteConfig.name}
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Registered nurse with twelve years at the bedside, now working on the
-          data side of the same operational problems. I am the bridge between
+          Registered nurse with 12 years of clinical experience across critical
+          care and patient placement, now working on the data side of the same
+          operational problems. I am the bridge between
           clinical work and the technology built for it: analytics that show how
           hospital operations actually run, and NLP and interpretable models
           that take the clerical weight out of a workflow — with a clinician
@@ -226,9 +227,9 @@ export default function Home() {
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           A model that scores well in a notebook and a model that changes what a
           nurse does at three in the morning are two different problems. Twelve
-          years at the bedside is what I bring to the second one — reading
-          whether a prediction fits the work, and whether the people on the
-          receiving end will act on it.
+          years in critical care and patient placement is what I bring to the
+          second one — reading whether a prediction fits the work, and whether
+          the people on the receiving end will act on it.
         </p>
 
         <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">

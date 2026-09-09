@@ -19,8 +19,9 @@ parse until it exhausts the V8 heap. Leave those exclusions in place.
 
 ## What the site is for
 
-A personal portfolio site for **Josh Homan** — a registered nurse with twelve
-years of bedside experience moving into clinical analytics and data science.
+A personal portfolio site for **Josh Homan** — a registered nurse with 12
+years of clinical experience across critical care and patient placement, moving
+into clinical analytics and data science.
 
 It has one job: give hiring managers for clinical analytics roles a place to
 see healthcare data work. It is linked from Josh's resume, so every claim on
@@ -37,7 +38,7 @@ not reintroduce social links.
    project
 3. **Clinical AI** — how Josh evaluates whether a model fits clinical work.
    Deliberately about judgment and approach, not a portfolio of built models;
-   the bedside experience is the credential here. Targets Clinical AI
+   the clinical experience is the credential here. Targets Clinical AI
    Application Analyst-type roles.
 4. **Quantitative research** — branded data visualizations. Undecided; this
    section was originally scoped around the X audience and may be cut.

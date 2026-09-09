@@ -56,8 +56,9 @@ export default function Image() {
               maxWidth: 880,
             }}
           >
-            Registered nurse, twelve years at the bedside. Now working the data
-            side of the same problems.
+            Registered nurse — 12 years of clinical experience across critical
+            care and patient placement. Now working the data side of the same
+            problems.
           </div>
         </div>
 

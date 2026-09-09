@@ -1,8 +1,8 @@
 # clinical-analytics
 
 Portfolio and credibility site for **Josh Homan** — a registered nurse with
-twelve years of bedside experience working in clinical analytics and data
-science.
+12 years of clinical experience across critical care and patient placement, now
+working in clinical analytics and data science.
 
 Two projects share this repo.
 
