@@ -1,20 +1,5 @@
 import { siteConfig } from "@/lib/site";
 
-/**
- * Homepage.
- *
- * Three sections on one shared measure (max-w-content) so every left edge
- * lines up down the page: who this is, what has been built, how to reach him.
- * Sections are separated by hairline rules rather than cards or shadows,
- * per the design system in app/globals.css.
- */
-
-/**
- * What the Transfer Center dashboard actually examines. These are the
- * questions the app answers, not results — the underlying extract is
- * synthetic and regenerated per run, so quoting fixed figures here would be
- * inventing findings.
- */
 const transferCenterFocus = [
   {
     label: "Volume",
@@ -34,102 +19,154 @@ const transferCenterFocus = [
   },
 ];
 
+const projects = [
+  {
+    title: "Transfer Center vs. Emergency Department",
+    type: "Patient placement analytics",
+    description:
+      "A clinical operations dashboard comparing transfer-center admissions to emergency department admissions with a sharper lens on acuity and length of stay by level of care.",
+    href: siteConfig.dashboardUrl,
+    tags: ["Streamlit", "Healthcare", "Operational analytics"],
+  },
+];
+
 export default function Home() {
   return (
     <main className="mx-auto w-full max-w-content px-6 py-20 sm:py-28">
-      {/* --- Hero ------------------------------------------------------- */}
       <section>
-        <p className="numeral text-xs uppercase tracking-widest text-ink-subtle">
+        <p className="numeral text-xs uppercase tracking-[0.22em] text-ink-subtle">
           {siteConfig.role}
         </p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           {siteConfig.name}
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Registered nurse with twelve years at the bedside, now working the
-          data side of the same problems. I build analytics on the operational
-          questions I used to live with on shift — patient placement, acuity,
-          and throughput.
+          Registered nurse with twelve years at the bedside, now working on the
+          data side of the same operational problems. I build healthcare
+          analytics, decision-support dashboards, and visual explanations that
+          turn messy clinical complexity into clearer stories.
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-4">
+          <a
+            href={siteConfig.resumeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center rounded-sm bg-accent px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          >
+            View resume
+          </a>
+        </div>
+      </section>
+
+      <hr className="my-14 border-line sm:my-16" />
+
+      <section>
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
+            Selected work
+          </h2>
+          <a
+            href={siteConfig.githubUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+          >
+            GitHub
+          </a>
+        </div>
+
+        <div className="mt-8 space-y-8">
+          {projects.map((project) => (
+            <article
+              key={project.title}
+              className="border-t border-line pt-6 first:border-t-0 first:pt-0"
+            >
+              <p className="numeral text-xs uppercase tracking-[0.2em] text-ink-subtle">
+                {project.type}
+              </p>
+              <h3 className="mt-3 text-2xl font-medium tracking-tight text-ink">
+                {project.title}
+              </h3>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
+                {project.description}
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-ink-subtle"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <p className="mt-6">
+                <a
+                  href={project.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+                >
+                  View project
+                </a>
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <hr className="my-14 border-line sm:my-16" />
+
+      <section>
+        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
+          Project focus
+        </h2>
+
+        <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+          {transferCenterFocus.map(({ label, detail }) => (
+            <div key={label} className="border-t border-line pt-3">
+              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
+                {label}
+              </dt>
+              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <p className="mt-8 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
+          Built on synthetic, Epic-shaped data. No real patient records are used,
+          and this app is a demonstration piece rather than a clinical tool.
         </p>
       </section>
 
       <hr className="my-14 border-line sm:my-16" />
 
-      {/* --- Selected work ---------------------------------------------- */}
       <section>
-        <h2 className="text-sm font-medium uppercase tracking-widest text-ink-subtle">
-          Selected work
-        </h2>
-
-        <article className="mt-8">
-          <h3 className="text-2xl font-medium tracking-tight text-ink">
-            Transfer Center vs. Emergency Department
-          </h3>
-          <p className="numeral mt-2 text-xs uppercase tracking-wider text-ink-subtle">
-            Patient placement analytics · Streamlit · Epic-oriented
-          </p>
-
-          <p className="mt-5 max-w-2xl leading-relaxed text-ink-muted">
-            Inpatient encounters arriving through the Transfer Center run
-            higher acuity than ED admits, so comparing length of stay directly
-            just measures case mix. This dashboard{" "}
-            <span className="text-ink">stratifies LOS by level of care</span>{" "}
-            instead, which asks the sharper operational question: do transfers
-            stay longer <em>at the same level of care</em>, or does the raw gap
-            simply reflect more ICU admissions?
-          </p>
-
-          <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-            {transferCenterFocus.map(({ label, detail }) => (
-              <div key={label} className="border-t border-line pt-3">
-                <dt className="text-xs uppercase tracking-wider text-ink-subtle">
-                  {label}
-                </dt>
-                <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <p className="mt-8">
-            <a
-              href={siteConfig.dashboardUrl}
-              className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
-            >
-              Source and documentation
-            </a>
-          </p>
-
-          {/* Stated plainly and up front: this is a demonstration build on
-              generated data, and nothing here touches real patient records. */}
-          <p className="mt-6 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
-            Built on synthetic, Epic-shaped data. No real patient records are
-            used, and the app is a demonstration piece — not for clinical use.
-          </p>
-        </article>
-      </section>
-
-      <hr className="my-14 border-line sm:my-16" />
-
-      {/* --- Contact ---------------------------------------------------- */}
-      <section>
-        <h2 className="text-sm font-medium uppercase tracking-widest text-ink-subtle">
+        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
           Elsewhere
         </h2>
         <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
           <li>
             <a
-              href={siteConfig.xUrl}
+              href={siteConfig.githubUrl}
+              target="_blank"
+              rel="noreferrer"
               className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
             >
-              {siteConfig.xHandle}
+              GitHub
             </a>
           </li>
           <li>
             <a
-              href={siteConfig.githubUrl}
+              href={siteConfig.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
               className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
             >
-              GitHub
+              Resume
             </a>
           </li>
         </ul>

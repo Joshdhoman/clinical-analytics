@@ -73,7 +73,7 @@ export default function Image() {
           <div
             style={{ fontSize: 30, fontWeight: 600, color: brand.accentInk }}
           >
-            {siteConfig.xHandle}
+            Data science portfolio
           </div>
         </div>
       </div>

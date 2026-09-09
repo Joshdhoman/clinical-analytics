@@ -2,7 +2,7 @@
  * Single source of truth for site-wide strings and the canonical URL.
  *
  * Anything that appears in more than one place — the <title>, the OG card, the
- * footer, the X link — reads from here so the site can never contradict itself.
+ * footer, the resume link — reads from here so the site can never contradict itself.
  */
 
 /**
@@ -31,11 +31,10 @@ export const siteConfig = {
   description:
     "Registered nurse with twelve years at the bedside, now working in clinical analytics and data science. Healthcare data projects and quantitative research.",
   url: resolveSiteUrl(),
-  xHandle: "@TheHomanQuant",
-  xUrl: "https://x.com/TheHomanQuant",
   githubUrl: "https://github.com/Joshdhoman",
   repoUrl: "https://github.com/Joshdhoman/clinical-analytics",
   dashboardUrl: "https://github.com/Joshdhoman/clinical-analytics/tree/main/dashboard",
+  resumeUrl: "/Josh_Homan_Resume_Sept_2026.pdf",
 } as const;
 
 /**
