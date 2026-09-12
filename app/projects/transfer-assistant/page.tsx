@@ -40,9 +40,9 @@ const pipeline = [
   },
   {
     step: "05",
-    label: "Human review",
+    label: "Final coordinator decision",
     detail:
-      "A coordinator confirms or overrides the route with a written rationale. The decision is appended to an audit log that records the route, rule IDs, versions, and a hash of the note — never the note itself.",
+      "A coordinator accepts the suggested route or chooses a different route and documents why. The decision is appended to a local record containing the route, rule IDs, versions, and a hash of the note — never the note itself.",
   },
 ];
 

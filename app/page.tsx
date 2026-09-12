@@ -60,7 +60,7 @@ const projects: Project[] = [
     title: "Clinical AI Transfer Assistant",
     type: "Decision support · NLP and interpretable ML",
     description:
-      "Turns an unstructured transfer referral into a reviewable summary and a provisional routing suggestion. Rule-based NLP extracts sixteen fields and shows the source text as evidence for each one, flags what is missing or contradictory, and an interpretable decision tree offers a second opinion. A coordinator confirms or overrides every suggestion, and the decision is written to an audit log.",
+      "Turns an unstructured transfer referral into a reviewable summary and a provisional routing suggestion. Rule-based NLP extracts sixteen fields and shows the source text as evidence for each one, flags what is missing or contradictory, and an interpretable decision tree offers a second opinion. A coordinator accepts the suggested route or chooses a different route, documents why, and records the final decision.",
     href: siteConfig.transferAssistantUrl,
     demoHref: siteConfig.transferAssistantDemoUrl,
     caseStudyHref: "/projects/transfer-assistant",
@@ -247,7 +247,7 @@ export default function Home() {
           The transfer assistant is where this is worked out in code: every
           extracted field carries the source text it came from, the model
           abstains rather than guessing when evidence is thin, and a coordinator
-          confirms or overrides each suggestion. Synthetic data only, decision
+          accepts the suggested route or chooses a different route. Synthetic data only, decision
           support only — it is not validated for clinical use.
         </p>
       </section>
