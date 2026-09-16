@@ -262,7 +262,7 @@ export default function Home() {
             <ProjectDetail
               id="clinical-ai"
               label="Clinical AI"
-              intro="A model has to work on the unit as well as in a Python notebook. After twelve years in critical care and patient placement, I know what clinicians act on and what they route around, and that is what I check a model against."
+              intro="A model has to work in the clinical setting as well as in a Python notebook. After twelve years in critical care and patient placement, I know what clinicians act on and what they route around, and that is what I check a model against."
               focus={clinicalAiFocus}
               note="The transfer assistant is where this is worked out in code: every extracted field carries the source text it came from, the model abstains rather than guessing when evidence is thin, and a coordinator accepts the suggested route or chooses a different route. Synthetic data only, decision support only — it is not validated for clinical use."
             />
