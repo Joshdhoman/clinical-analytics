@@ -10,29 +10,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/visualizations" },
 };
 
-const methods = [
-  {
-    label: "Form follows the question",
-    detail:
-      "A dumbbell when the point is a disagreement, small multiples when the point is that the answer moves, a null band when the point is that it might not be there at all.",
-  },
-  {
-    label: "The method is on the chart",
-    detail:
-      "Every exhibit carries its data source, window, and calculation in the footer, so a reader can check the figure without asking.",
-  },
-  {
-    label: "Claims sized to the evidence",
-    detail:
-      "A best-fit line is described as association. A ten-event sample is called small. Correlation inside the noise band is called noise.",
-  },
-  {
-    label: "One system",
-    detail:
-      "Shared type, spacing, and a small palette across every chart, so the reader learns the visual language once.",
-  },
-];
-
 export default function VisualizationsPage() {
   return (
     <main className="mx-auto w-full max-w-content px-6 py-20 sm:py-28">
@@ -59,21 +36,6 @@ export default function VisualizationsPage() {
       </header>
 
       <section className="mt-14">
-        <dl className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-          {methods.map(({ label, detail }) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
-                {label}
-              </dt>
-              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <hr className="my-14 border-line sm:my-16" />
-
-      <section>
         <ul className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {visualizations.map((viz, index) => (
             <li key={viz.slug} id={viz.slug} className="scroll-mt-20">

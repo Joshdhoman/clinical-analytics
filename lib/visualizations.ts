@@ -25,6 +25,28 @@ export type Visualization = {
 
 export const visualizations: Visualization[] = [
   {
+    slug: "emmys-wins-by-platform",
+    src: "/images/viz/emmys-wins-by-platform.png",
+    width: 2160,
+    height: 2700,
+    title: "Emmy wins by platform, 2019–2026",
+    chartType: "Ranked bar + multi-line",
+    method:
+      "Total wins per platform for one ceremony year as a ranked bar, then an eight-season line series with the leader tagged under each year. A ranking and a trend in one exhibit, with the counts in stat tiles up top.",
+    alt: "Ranked horizontal bar chart of 2026 Emmy wins by platform, above a multi-line chart of wins per season from 2019 to 2026 with the annual leader labeled.",
+  },
+  {
+    slug: "mortgage-rates-vs-homebuilding",
+    src: "/images/viz/mortgage-rates-vs-homebuilding.png",
+    width: 1080,
+    height: 1350,
+    title: "Rates and housing starts",
+    chartType: "Scatter with fit line",
+    method:
+      "Monthly housing starts against the 30-year Treasury rate since January 2022, with a least-squares line: about 118,000 fewer homes per point of rate. The caption says association, not cause, on purpose.",
+    alt: "Scatter plot of monthly new-home starts against the 30-year Treasury rate with a downward-sloping best-fit line and today's point marked.",
+  },
+  {
     slug: "nfl-model-vs-vegas",
     src: "/images/viz/nfl-model-vs-vegas.png",
     width: 1080,
@@ -80,17 +102,6 @@ export const visualizations: Visualization[] = [
     alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
   },
   {
-    slug: "mortgage-rates-vs-homebuilding",
-    src: "/images/viz/mortgage-rates-vs-homebuilding.png",
-    width: 1080,
-    height: 1350,
-    title: "Rates and housing starts",
-    chartType: "Scatter with fit line",
-    method:
-      "Monthly housing starts against the 30-year Treasury rate since January 2022, with a least-squares line: about 118,000 fewer homes per point of rate. The caption says association, not cause, on purpose.",
-    alt: "Scatter plot of monthly new-home starts against the 30-year Treasury rate with a downward-sloping best-fit line and today's point marked.",
-  },
-  {
     slug: "productivity-pay-gap",
     src: "/images/viz/productivity-pay-gap.png",
     width: 1080,
@@ -100,16 +111,5 @@ export const visualizations: Visualization[] = [
     method:
       "Net productivity and median hourly compensation indexed to 1979, then EPI's decomposition of the gap into three components as a single stacked bar. Two chart forms carry one argument.",
     alt: "Area chart of productivity rising 72 percent against pay rising 16 percent from 1979 to 2019, above a stacked bar decomposing the gap into three causes.",
-  },
-  {
-    slug: "emmys-wins-by-platform",
-    src: "/images/viz/emmys-wins-by-platform.png",
-    width: 2160,
-    height: 2700,
-    title: "Emmy wins by platform, 2019–2026",
-    chartType: "Ranked bar + multi-line",
-    method:
-      "Total wins per platform for one ceremony year as a ranked bar, then an eight-season line series with the leader tagged under each year. A ranking and a trend in one exhibit, with the counts in stat tiles up top.",
-    alt: "Ranked horizontal bar chart of 2026 Emmy wins by platform, above a multi-line chart of wins per season from 2019 to 2026 with the annual leader labeled.",
   },
 ];
