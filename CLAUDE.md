@@ -50,6 +50,12 @@ not reintroduce social links.
    frames on the white page. No social links — the series is named, not linked.
 5. **Contact**
 
+On the page, sections 2–4 are all cards inside one "Selected work" list, and
+the "Clinical AI" and "Inside the placement dashboard" detail blocks hang
+directly off their project cards (`ProjectDetail` inside `ProjectCard`) rather
+than standing as separate sections. Contact says "data analytics, clinical AI,
+and data science roles" — broader than clinical analytics alone, by decision.
+
 Build one section at a time. Josh reviews each before the next starts.
 
 ## Visual direction

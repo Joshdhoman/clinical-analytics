@@ -95,7 +95,59 @@ const [transferAssistant, patientPlacement] = projects;
 
 const visualizationTags = ["Regression", "Event study", "Heatmap", "Chart design"];
 
-function ProjectCard({ project }: { project: Project }) {
+type Focus = { label: string; detail: string };
+
+/**
+ * A detail block that hangs off a project card: a small label, an optional
+ * lead paragraph, a two-column list of what the work focuses on, and a callout.
+ */
+function ProjectDetail({
+  id,
+  label,
+  intro,
+  focus,
+  note,
+}: {
+  id?: string;
+  label: string;
+  intro?: string;
+  focus: Focus[];
+  note: string;
+}) {
+  return (
+    <div id={id} className="mt-8 scroll-mt-20">
+      <p className="text-xs font-medium uppercase tracking-[0.22em] text-ink-subtle">
+        {label}
+      </p>
+      {intro ? (
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
+          {intro}
+        </p>
+      ) : null}
+      <dl className="mt-6 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+        {focus.map(({ label, detail }) => (
+          <div key={label} className="border-t border-line pt-3">
+            <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
+              {label}
+            </dt>
+            <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-6 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
+        {note}
+      </p>
+    </div>
+  );
+}
+
+function ProjectCard({
+  project,
+  children,
+}: {
+  project: Project;
+  children?: React.ReactNode;
+}) {
   return (
     <article
       className="border-t border-line pt-6 first:border-t-0 first:pt-0"
@@ -149,6 +201,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.demoHref ? "Source" : "View project"}
         </a>
       </p>
+      {children}
     </article>
   );
 }
@@ -166,11 +219,13 @@ export default function Home() {
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           Registered nurse with 12 years of clinical experience across critical
           care and patient placement, now working on the data side of the same
-          operational problems. I am the bridge between
-          clinical work and the technology built for it: analytics that show how
-          hospital operations actually run, and NLP and interpretable models
-          that take the clerical weight out of a workflow — with a clinician
-          still making the call.
+          operational problems. I am the bridge between clinical work and the
+          technology built for it: analytics that show how hospital operations
+          actually run, NLP and interpretable models that take the clerical
+          weight off a workflow, and charts that make a finding clear to the
+          people who have to act on it. None of it replaces a clinician. The
+          tools handle the paperwork; the judgment stays with the person at the
+          bedside.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-4">
@@ -203,7 +258,15 @@ export default function Home() {
         </div>
 
         <div className="mt-8 space-y-8">
-          <ProjectCard project={transferAssistant} />
+          <ProjectCard project={transferAssistant}>
+            <ProjectDetail
+              id="clinical-ai"
+              label="Clinical AI"
+              intro="A model that scores well in a notebook and a model that changes what a nurse does at three in the morning are two different problems. Twelve years in critical care and patient placement is what I bring to the second one — reading whether a prediction fits the work, and whether the people on the receiving end will act on it."
+              focus={clinicalAiFocus}
+              note="The transfer assistant is where this is worked out in code: every extracted field carries the source text it came from, the model abstains rather than guessing when evidence is thin, and a coordinator accepts the suggested route or chooses a different route. Synthetic data only, decision support only — it is not validated for clinical use."
+            />
+          </ProjectCard>
 
           <article className="border-t border-line pt-6">
             <p className="numeral text-xs uppercase tracking-[0.2em] text-ink-subtle">
@@ -266,69 +329,15 @@ export default function Home() {
             </p>
           </article>
 
-          <ProjectCard project={patientPlacement} />
+          <ProjectCard project={patientPlacement}>
+            <ProjectDetail
+              label="Inside the placement dashboard"
+              focus={transferCenterFocus}
+              note="Built on synthetic, Epic-shaped data. No real patient records are used, and this app is a demonstration piece rather than a clinical tool."
+            />
+          </ProjectCard>
         </div>
       </section>
-
-      <hr className="my-14 border-line sm:my-16" />
-
-      <section>
-        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-          Inside the placement dashboard
-        </h2>
-
-        <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-          {transferCenterFocus.map(({ label, detail }) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
-                {label}
-              </dt>
-              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <p className="mt-8 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
-          Built on synthetic, Epic-shaped data. No real patient records are used,
-          and this app is a demonstration piece rather than a clinical tool.
-        </p>
-      </section>
-
-      <hr className="my-14 border-line sm:my-16" />
-
-      <section id="clinical-ai" className="scroll-mt-20">
-        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-          Clinical AI
-        </h2>
-
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          A model that scores well in a notebook and a model that changes what a
-          nurse does at three in the morning are two different problems. Twelve
-          years in critical care and patient placement is what I bring to the
-          second one — reading whether a prediction fits the work, and whether
-          the people on the receiving end will act on it.
-        </p>
-
-        <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-          {clinicalAiFocus.map(({ label, detail }) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
-                {label}
-              </dt>
-              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <p className="mt-8 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
-          The transfer assistant is where this is worked out in code: every
-          extracted field carries the source text it came from, the model
-          abstains rather than guessing when evidence is thin, and a coordinator
-          accepts the suggested route or chooses a different route. Synthetic data only, decision
-          support only — it is not validated for clinical use.
-        </p>
-      </section>
-
 
       <hr className="my-14 border-line sm:my-16" />
 
@@ -338,7 +347,7 @@ export default function Home() {
         </h2>
 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Open to clinical analytics, clinical AI, and data science roles. The
+          Open to data analytics, clinical AI, and data science roles. The
           fastest way to reach me is email.
         </p>
 
