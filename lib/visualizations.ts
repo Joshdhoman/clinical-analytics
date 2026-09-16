@@ -43,7 +43,7 @@ export const visualizations: Visualization[] = [
     title: "Bitcoin and gold, month by month",
     chartType: "Calendar heatmap",
     method:
-      "One square per month since January 2015, filled when both assets finished the month on the same side of zero. That happened in 72 of 139 months, 51.8 percent, against a coin-flip baseline of 50. The legend carries the counts so the reader can check the percentage.",
+      "One square per month since January 2015, filled in when Bitcoin and gold moved in the same direction that month. That happened in 72 of 139 months, 51.8 percent. A coin flip would give 50, so the two are barely correlated at all. The legend carries the counts so the reader can check the percentage.",
     alt: "Calendar heatmap with one square per month from 2015 to 2026, filled in orange when Bitcoin and gold moved in the same direction, 72 filled and 67 not.",
   },
   {
@@ -54,7 +54,7 @@ export const visualizations: Visualization[] = [
     title: "Rates and housing starts",
     chartType: "Scatter with fit line",
     method:
-      "Monthly housing starts against the 30-year Treasury rate since January 2022, with a least-squares line: about 118,000 fewer homes per point of rate. The caption says association, not cause, on purpose.",
+      "Each dot is one month since January 2022: new homes started that year on the vertical axis, the 30-year Treasury rate on the horizontal. The best-fit line says that when the rate is one point higher, builders start about 118,000 fewer homes a year. The caption says association, not cause, on purpose.",
     alt: "Scatter plot of monthly new-home starts against the 30-year Treasury rate with a downward-sloping best-fit line and today's point marked.",
   },
   {
