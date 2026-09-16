@@ -125,6 +125,54 @@ export default function Home() {
 
       <hr className="my-14 border-line sm:my-16" />
 
+      <section id="visualization" className="scroll-mt-20">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
+            Data visualization
+          </h2>
+          <Link
+            href="/visualizations"
+            className="text-sm font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+          >
+            All {visualizations.length} charts
+          </Link>
+        </div>
+
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          Finished charts from a data-visualization series I write and design:
+          regression and event studies, a calendar heatmap, labor-market
+          series. The topics change from chart to chart. The
+          way each one is built does not: the data source and calculation are
+          printed on the chart, and the claim is no bigger than the evidence.
+        </p>
+
+        <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-3">
+          {featuredVisualizations.map((viz) => (
+            <li key={viz.slug}>
+              <Link
+                href={`/visualizations#${viz.slug}`}
+                className="block overflow-hidden rounded-sm border border-line transition-opacity hover:opacity-90"
+              >
+                <Image
+                  src={viz.src}
+                  alt={viz.alt}
+                  width={viz.width}
+                  height={viz.height}
+                  sizes="(min-width: 640px) 22rem, 100vw"
+                  className="h-auto w-full"
+                />
+              </Link>
+              <p className="numeral mt-3 text-xs uppercase tracking-[0.2em] text-ink-subtle">
+                {viz.chartType}
+              </p>
+              <p className="mt-1 text-sm font-medium text-ink">{viz.title}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <hr className="my-14 border-line sm:my-16" />
+
       <section>
         <div className="flex items-end justify-between gap-4">
           <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
@@ -259,53 +307,6 @@ export default function Home() {
         </p>
       </section>
 
-      <hr className="my-14 border-line sm:my-16" />
-
-      <section id="visualization" className="scroll-mt-20">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-            Data visualization
-          </h2>
-          <Link
-            href="/visualizations"
-            className="text-sm font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
-          >
-            All {visualizations.length} charts
-          </Link>
-        </div>
-
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Finished charts from a data-visualization series I write and design:
-          regression and event studies, a calendar heatmap, labor-market
-          series. The topics change from chart to chart. The
-          way each one is built does not: the data source and calculation are
-          printed on the chart, and the claim is no bigger than the evidence.
-        </p>
-
-        <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-3">
-          {featuredVisualizations.map((viz) => (
-            <li key={viz.slug}>
-              <Link
-                href={`/visualizations#${viz.slug}`}
-                className="block overflow-hidden rounded-sm border border-line transition-opacity hover:opacity-90"
-              >
-                <Image
-                  src={viz.src}
-                  alt={viz.alt}
-                  width={viz.width}
-                  height={viz.height}
-                  sizes="(min-width: 640px) 22rem, 100vw"
-                  className="h-auto w-full"
-                />
-              </Link>
-              <p className="numeral mt-3 text-xs uppercase tracking-[0.2em] text-ink-subtle">
-                {viz.chartType}
-              </p>
-              <p className="mt-1 text-sm font-medium text-ink">{viz.title}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
 
       <hr className="my-14 border-line sm:my-16" />
 

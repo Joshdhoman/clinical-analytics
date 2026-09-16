@@ -40,7 +40,8 @@ not reintroduce social links.
    Deliberately about judgment and approach, not a portfolio of built models;
    the clinical experience is the credential here. Targets Clinical AI
    Application Analyst-type roles.
-4. **Data visualization** — twelve finished charts from The Homan Quant,
+4. **Data visualization** (shown second on the page, directly after the hero)
+   — twelve finished charts from The Homan Quant,
    framed around chart form and method rather than subject. Home-page section
    previews three and links to `/visualizations`; the list lives in
    `lib/visualizations.ts`, images in `public/images/viz/`. The charts are
