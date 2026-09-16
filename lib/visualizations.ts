@@ -69,28 +69,6 @@ export const visualizations: Visualization[] = [
     alt: "Dumbbell chart of all 32 NFL teams, each showing a model-projected win total beside the Vegas line, with the twelve largest disagreements highlighted.",
   },
   {
-    slug: "fed-hike-event-study",
-    src: "/images/viz/fed-hike-event-study.png",
-    width: 1080,
-    height: 1350,
-    title: "Three assets after a Fed hike",
-    chartType: "Event study",
-    method:
-      "Average return 1, 7, and 30 calendar days after each of the 20 rate hikes from December 2015 to July 2023, for Bitcoin, the S&P 500, and gold. Grouped bars, one group per horizon.",
-    alt: "Grouped bar chart of average returns for Bitcoin, the S&P 500, and gold at one, seven, and thirty days after a Fed rate hike.",
-  },
-  {
-    slug: "implied-vs-realized-vol",
-    src: "/images/viz/implied-vs-realized-vol.png",
-    width: 1080,
-    height: 1350,
-    title: "What options priced vs. what happened",
-    chartType: "Layered bars",
-    method:
-      "The S&P 500's implied daily move (prior VIX close divided by the square root of 252) drawn behind the realized close-to-close move for 23 sessions. Days that moved more than priced are flagged, and the averages are summarized below the chart.",
-    alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
-  },
-  {
     slug: "satisfaction-by-income",
     src: "/images/viz/satisfaction-by-income.png",
     width: 1080,
@@ -111,6 +89,28 @@ export const visualizations: Visualization[] = [
     method:
       "Overall job satisfaction from The Conference Board's annual survey, 2010 to 2026, on the left axis; the monthly quits rate from BLS JOLTS on the right. Two series from two sources, with the endpoints and the 2022 quits peak labeled directly on the lines.",
     alt: "Line chart with job satisfaction rising from 42.6 percent in 2010 to a record 68.9 percent in 2026, and the quits rate peaking at 2.8 percent in 2022 before falling to 1.9 percent.",
+  },
+  {
+    slug: "fed-hike-event-study",
+    src: "/images/viz/fed-hike-event-study.png",
+    width: 1080,
+    height: 1350,
+    title: "Three assets after a Fed hike",
+    chartType: "Event study",
+    method:
+      "Average return 1, 7, and 30 calendar days after each of the 20 rate hikes from December 2015 to July 2023, for Bitcoin, the S&P 500, and gold. Grouped bars, one group per horizon.",
+    alt: "Grouped bar chart of average returns for Bitcoin, the S&P 500, and gold at one, seven, and thirty days after a Fed rate hike.",
+  },
+  {
+    slug: "implied-vs-realized-vol",
+    src: "/images/viz/implied-vs-realized-vol.png",
+    width: 1080,
+    height: 1350,
+    title: "What options priced vs. what happened",
+    chartType: "Layered bars",
+    method:
+      "The S&P 500's implied daily move (prior VIX close divided by the square root of 252) drawn behind the realized close-to-close move for 23 sessions. Days that moved more than priced are flagged, and the averages are summarized below the chart.",
+    alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
   },
   {
     slug: "jobs-by-industry",
