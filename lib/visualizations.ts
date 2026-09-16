@@ -102,15 +102,15 @@ export const visualizations: Visualization[] = [
     alt: "Grouped bar chart of average returns for Bitcoin, the S&P 500, and gold at one, seven, and thirty days after a Fed rate hike.",
   },
   {
-    slug: "implied-vs-realized-vol",
-    src: "/images/viz/implied-vs-realized-vol.png",
+    slug: "hormuz-oil-flow",
+    src: "/images/viz/hormuz-oil-flow.png",
     width: 1080,
     height: 1350,
-    title: "What options priced vs. what happened",
-    chartType: "Layered bars",
+    title: "One chokepoint, more oil than the U.S. produces",
+    chartType: "Headline figure + comparison bars",
     method:
-      "The S&P 500's implied daily move (prior VIX close divided by the square root of 252) drawn behind the realized close-to-close move for 23 sessions. Days that moved more than priced are flagged, and the averages are summarized below the chart.",
-    alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
+      "Three horizontal bars on one scale: oil flow through the Strait of Hormuz before, flow now, and total U.S. production, so the 16.7 million barrel a day drop can be read against a number people already know. EIA chokepoint estimates and the August 2026 Short-Term Energy Outlook.",
+    alt: "A large 16.7 million barrels a day figure above three bars: Hormuz flow before at 21.6 million, Hormuz now at 4.9 million, and all U.S. production at 13.9 million.",
   },
   {
     slug: "jobs-by-industry",
@@ -144,5 +144,16 @@ export const visualizations: Visualization[] = [
     method:
       "Study 329, an antidepressant trial in adolescents published in 2001. The top stack is the nine outcomes written down before the trial, none of which beat placebo; the bottom is the four positive results in the published paper, none of which were on the original list. Counts from the 2015 independent reanalysis in The BMJ.",
     alt: "Two stacks of horizontal bars: nine gray bars for outcomes promised before the trial, none of which beat a sugar pill, and four gold bars for positive results reported in the published paper, none of which were pre-specified.",
+  },
+  {
+    slug: "implied-vs-realized-vol",
+    src: "/images/viz/implied-vs-realized-vol.png",
+    width: 1080,
+    height: 1350,
+    title: "What options priced vs. what happened",
+    chartType: "Layered bars",
+    method:
+      "The S&P 500's implied daily move (prior VIX close divided by the square root of 252) drawn behind the realized close-to-close move for 23 sessions. Days that moved more than priced are flagged, and the averages are summarized below the chart.",
+    alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
   },
 ];
