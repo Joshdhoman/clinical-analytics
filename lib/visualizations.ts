@@ -43,7 +43,7 @@ export const visualizations: Visualization[] = [
     title: "Bitcoin and gold, month by month",
     chartType: "Calendar heatmap",
     method:
-      "One square per month since January 2015, filled in when Bitcoin and gold moved in the same direction that month. That happened in 72 of 139 months, 51.8 percent. A coin flip would give 50, so the two are barely correlated at all. The legend carries the counts so the reader can check the percentage.",
+      "One square per month since January 2015, filled in when Bitcoin and gold moved in the same direction that month. That happened in 72 of 139 months, 51.8 percent. A coin flip would give 50, so the two are barely correlated at all. The legend carries the counts so the reader can verify the percentage.",
     alt: "Calendar heatmap with one square per month from 2015 to 2026, filled in orange when Bitcoin and gold moved in the same direction, 72 filled and 67 not.",
   },
   {
@@ -65,7 +65,7 @@ export const visualizations: Visualization[] = [
     title: "Model vs. market: NFL win totals",
     chartType: "Dumbbell comparison",
     method:
-      "An ensemble of ridge regression, gradient boosting, and a random forest, trained on 736 team-seasons since 2002 and walk-forward tested on 15 unseen seasons. Each team's projection sits beside the sportsbook line so the disagreement is the chart.",
+      "A model I trained on every NFL season since 2002 predicts each team's 2026 win total from last season's play: efficiency per play, point differential, turnovers, and schedule strength. It was tested on 15 seasons it had never seen. Each row shows my number next to the Vegas number, and the highlighted rows are the twelve teams where the two disagree most.",
     alt: "Dumbbell chart of all 32 NFL teams, each showing a model-projected win total beside the Vegas line, with the twelve largest disagreements highlighted.",
   },
   {
@@ -131,7 +131,7 @@ export const visualizations: Visualization[] = [
     title: "Who runs TikTok's U.S. business",
     chartType: "Stacked bar + sourced table",
     method:
-      "A 100 percent stacked bar of ownership before and after the joint venture, board seats as a unit chart, then a who-runs-what table with a column for who says so. Built from the joint-venture filing, the White House fact sheet, a DOJ opinion, and a House committee letter; five of the six answers rest on TikTok's own account, and the chart says so.",
+      "Who owns TikTok's U.S. business before and after the deal, as a stacked bar, then a table of who controls the data, the algorithm, moderation, and ads, with a column naming the source for each answer. Five of the six answers come from TikTok itself, and the chart says so.",
     alt: "Stacked bar showing ByteDance's TikTok stake falling from 100 percent to 19.9 percent alongside Oracle, Silver Lake, MGX, and other investors, above a table of who controls data, algorithm, moderation, and ads, each with its source.",
   },
   {
