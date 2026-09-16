@@ -76,7 +76,7 @@ export const visualizations: Visualization[] = [
     title: "Satisfaction by household income",
     chartType: "Bar chart with reference line",
     method:
-      "Share of workers who say they are satisfied, for households under $25,000 and at $150,000 or more, against the national figure as a dashed reference line. Two bars and one line carry a 31-point gap. The Conference Board Job Satisfaction survey, 2026.",
+      "Job satisfaction for the lowest-income households next to the highest, with the national average as a dashed line. The gap is 31 points. From The Conference Board's 2026 job satisfaction survey.",
     alt: "Two bars showing 45.3 percent job satisfaction for households under 25,000 dollars and 76 percent for households at 150,000 or more, with a dashed line at the 68.9 percent national figure.",
   },
   {
