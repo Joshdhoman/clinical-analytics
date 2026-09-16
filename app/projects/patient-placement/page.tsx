@@ -23,7 +23,7 @@ export default function PatientPlacementCaseStudy() {
       <header className="mt-10">
         <p className="numeral text-xs uppercase tracking-[0.22em] text-ink-subtle">Case study · Clinical operations</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Patient placement,<br />in perspective.</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">An overall length-of-stay comparison can hide the differences between the patients entering through a transfer center and those admitted from the emergency department. This dashboard puts the care mix next to the outcome, so the question becomes more specific: how do stays compare within a level of care?</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">An overall length-of-stay comparison can hide the differences between the patients entering through a transfer center and those admitted from the emergency department. This dashboard puts the care mix next to the outcome, so the question becomes more specific: how do hospital stays compare within a level of care?</p>
         <div className="mt-8 flex flex-wrap items-center gap-6">
           {siteConfig.dashboardDemoUrl ? <a href={siteConfig.dashboardDemoUrl} target="_blank" rel="noreferrer" className="rounded-sm bg-accent px-4 py-2 text-sm font-medium text-ink-inverse">Open the live app</a> : null}
           <a href={siteConfig.dashboardUrl} target="_blank" rel="noreferrer" className="font-medium text-accent-ink underline decoration-accent underline-offset-4">Source and methodology</a>
