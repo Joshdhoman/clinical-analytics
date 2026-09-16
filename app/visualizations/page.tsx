@@ -31,7 +31,8 @@ export default function VisualizationsPage() {
           Finished exhibits from The Homan Quant, a data-visualization series I
           write and design. The topics change from chart to chart — sports,
           housing, markets, labor. The way each one is built does not. Each
-          chart below says what form it takes and how the figure was produced.
+          chart below has the chart type listed and a note on how the figure
+          was produced.
         </p>
       </header>
 
