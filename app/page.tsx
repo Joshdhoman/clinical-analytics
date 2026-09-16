@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import { visualizations } from "@/lib/visualizations";
 
 const transferCenterFocus = [
   {
@@ -83,6 +85,11 @@ const projects: Project[] = [
     tags: ["Streamlit", "Healthcare", "Operational analytics", "Synthetic data"],
   },
 ];
+
+/** The three charts previewed on the home page, chosen to span domains. */
+const featuredVisualizations = ["aca-payment-map", "nfl-model-vs-vegas", "mortgage-rates-vs-homebuilding"]
+  .map((slug) => visualizations.find((viz) => viz.slug === slug))
+  .filter((viz) => viz !== undefined);
 
 export default function Home() {
   return (
@@ -250,6 +257,54 @@ export default function Home() {
           accepts the suggested route or chooses a different route. Synthetic data only, decision
           support only — it is not validated for clinical use.
         </p>
+      </section>
+
+      <hr className="my-14 border-line sm:my-16" />
+
+      <section id="visualization" className="scroll-mt-20">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
+            Data visualization
+          </h2>
+          <Link
+            href="/visualizations"
+            className="text-sm font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+          >
+            All {visualizations.length} charts
+          </Link>
+        </div>
+
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          Finished charts from a data-visualization series I write and design:
+          regression and event studies, rolling correlation against a null
+          band, choropleths, small multiples. The subjects vary; the discipline
+          is the same one the healthcare work runs on — the method is on the
+          chart and the claim is sized to the evidence.
+        </p>
+
+        <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-3">
+          {featuredVisualizations.map((viz) => (
+            <li key={viz.slug}>
+              <Link
+                href={`/visualizations#${viz.slug}`}
+                className="block overflow-hidden rounded-sm border border-line transition-opacity hover:opacity-90"
+              >
+                <Image
+                  src={viz.src}
+                  alt={viz.alt}
+                  width={viz.width}
+                  height={viz.height}
+                  sizes="(min-width: 640px) 22rem, 100vw"
+                  className="h-auto w-full"
+                />
+              </Link>
+              <p className="numeral mt-3 text-xs uppercase tracking-[0.2em] text-ink-subtle">
+                {viz.chartType}
+              </p>
+              <p className="mt-1 text-sm font-medium text-ink">{viz.title}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <hr className="my-14 border-line sm:my-16" />
