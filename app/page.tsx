@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import { visualizations } from "@/lib/visualizations";
 
 const transferCenterFocus = [
   {
@@ -84,6 +86,126 @@ const projects: Project[] = [
   },
 ];
 
+/** The three charts previewed on the home page, chosen to span domains. */
+const featuredVisualizations = ["nfl-model-vs-vegas", "mortgage-rates-vs-homebuilding", "btc-gold-direction-heatmap"]
+  .map((slug) => visualizations.find((viz) => viz.slug === slug))
+  .filter((viz) => viz !== undefined);
+
+const [transferAssistant, patientPlacement] = projects;
+
+const visualizationTags = ["Regression", "Event study", "Heatmap", "Chart design"];
+
+type Focus = { label: string; detail: string };
+
+/**
+ * A detail block that hangs off a project card: a small label, an optional
+ * lead paragraph, a two-column list of what the work focuses on, and a callout.
+ */
+function ProjectDetail({
+  id,
+  label,
+  intro,
+  focus,
+  note,
+}: {
+  id?: string;
+  label: string;
+  intro?: string;
+  focus: Focus[];
+  note: string;
+}) {
+  return (
+    <div id={id} className="mt-8 scroll-mt-20">
+      <p className="text-xs font-medium uppercase tracking-[0.22em] text-ink-subtle">
+        {label}
+      </p>
+      {intro ? (
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
+          {intro}
+        </p>
+      ) : null}
+      <dl className="mt-6 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+        {focus.map(({ label, detail }) => (
+          <div key={label} className="border-t border-line pt-3">
+            <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
+              {label}
+            </dt>
+            <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-6 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
+        {note}
+      </p>
+    </div>
+  );
+}
+
+function ProjectCard({
+  project,
+  children,
+}: {
+  project: Project;
+  children?: React.ReactNode;
+}) {
+  return (
+    <article
+      className="border-t border-line pt-6 first:border-t-0 first:pt-0"
+    >
+      <p className="numeral text-xs uppercase tracking-[0.2em] text-ink-subtle">
+        {project.type}
+      </p>
+      <h3 className="mt-3 text-2xl font-medium tracking-tight text-ink">
+        {project.title}
+      </h3>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
+        {project.description}
+      </p>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-ink-subtle"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <p className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+        {project.demoHref ? (
+          <a
+            href={project.demoHref}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center rounded-sm bg-accent px-4 py-2 text-sm font-medium text-ink-inverse transition-opacity hover:opacity-90"
+          >
+            Open the live app
+          </a>
+        ) : null}
+        {project.caseStudyHref ? (
+          <Link
+            href={project.caseStudyHref}
+            className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+          >
+            Read the case study
+          </Link>
+        ) : null}
+        <a
+          href={project.href}
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+        >
+          {project.demoHref ? "Source" : "View project"}
+        </a>
+      </p>
+      {children}
+    </article>
+  );
+}
+
 export default function Home() {
   return (
     <main className="mx-auto w-full max-w-content px-6 py-20 sm:py-28">
@@ -97,11 +219,13 @@ export default function Home() {
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           Registered nurse with 12 years of clinical experience across critical
           care and patient placement, now working on the data side of the same
-          operational problems. I am the bridge between
-          clinical work and the technology built for it: analytics that show how
-          hospital operations actually run, and NLP and interpretable models
-          that take the clerical weight out of a workflow — with a clinician
-          still making the call.
+          operational problems. I am the bridge between clinical work and the
+          technology built for it: analytics that show how hospital operations
+          actually run, NLP and interpretable models that take the clerical
+          weight off a workflow, and charts that make a finding clear to the
+          people who have to act on it. None of it replaces a clinician. The
+          tools handle the paperwork; the judgment stays with the person at the
+          bedside.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-4">
@@ -134,122 +258,85 @@ export default function Home() {
         </div>
 
         <div className="mt-8 space-y-8">
-          {projects.map((project) => (
-            <article
-              key={project.title}
-              className="border-t border-line pt-6 first:border-t-0 first:pt-0"
-            >
-              <p className="numeral text-xs uppercase tracking-[0.2em] text-ink-subtle">
-                {project.type}
-              </p>
-              <h3 className="mt-3 text-2xl font-medium tracking-tight text-ink">
-                {project.title}
-              </h3>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
-                {project.description}
-              </p>
+          <ProjectCard project={transferAssistant}>
+            <ProjectDetail
+              id="clinical-ai"
+              label="Clinical AI"
+              intro="A model has to work in the clinical setting as well as in a Python notebook. After twelve years in critical care and patient placement, I know what clinicians act on and what they route around, and that is what I check a model against."
+              focus={clinicalAiFocus}
+              note="The transfer assistant is where this is worked out in code: every extracted field carries the source text it came from, the model abstains rather than guessing when evidence is thin, and a coordinator accepts the suggested route or chooses a different route. Synthetic data only, decision support only — it is not validated for clinical use."
+            />
+          </ProjectCard>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-ink-subtle"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+          <article className="border-t border-line pt-6">
+            <p className="numeral text-xs uppercase tracking-[0.2em] text-ink-subtle">
+              Data visualization · {visualizations.length} charts
+            </p>
+            <h3 className="mt-3 text-2xl font-medium tracking-tight text-ink">
+              Data Visualization Gallery
+            </h3>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
+              Finished charts from a data-visualization series I write and
+              design: regression and event studies, a calendar heatmap,
+              labor-market series. The topics change from chart to chart. The
+              way each one is built does not: the data source and calculation
+              are printed on the chart, and the claim is no bigger than the
+              evidence.
+            </p>
 
-              <p className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
-                {project.demoHref ? (
-                  <a
-                    href={project.demoHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center rounded-sm bg-accent px-4 py-2 text-sm font-medium text-ink-inverse transition-opacity hover:opacity-90"
-                  >
-                    Open the live app
-                  </a>
-                ) : null}
-                {project.caseStudyHref ? (
+            <ul className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-3">
+              {featuredVisualizations.map((viz) => (
+                <li key={viz.slug}>
                   <Link
-                    href={project.caseStudyHref}
-                    className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+                    href={`/visualizations#${viz.slug}`}
+                    className="block overflow-hidden rounded-sm border border-line transition-opacity hover:opacity-90"
                   >
-                    Read the case study
+                    <Image
+                      src={viz.src}
+                      alt={viz.alt}
+                      width={viz.width}
+                      height={viz.height}
+                      sizes="(min-width: 640px) 22rem, 100vw"
+                      className="h-auto w-full"
+                    />
                   </Link>
-                ) : null}
-                <a
-                  href={project.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-accent-ink underline decoration-accent decoration-2 underline-offset-4"
+                  <p className="numeral mt-3 text-xs uppercase tracking-[0.2em] text-ink-subtle">
+                    {viz.chartType}
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-ink">{viz.title}</p>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {visualizationTags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-ink-subtle"
                 >
-                  {project.demoHref ? "Source" : "View project"}
-                </a>
-              </p>
-            </article>
-          ))}
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <p className="mt-6">
+              <Link
+                href="/visualizations"
+                className="inline-flex items-center rounded-sm bg-accent px-4 py-2 text-sm font-medium text-ink-inverse transition-opacity hover:opacity-90"
+              >
+                See all {visualizations.length} charts
+              </Link>
+            </p>
+          </article>
+
+          <ProjectCard project={patientPlacement}>
+            <ProjectDetail
+              label="Inside the placement dashboard"
+              focus={transferCenterFocus}
+              note="Built on synthetic, Epic-shaped data. No real patient records are used, and this app is a demonstration piece rather than a clinical tool."
+            />
+          </ProjectCard>
         </div>
-      </section>
-
-      <hr className="my-14 border-line sm:my-16" />
-
-      <section>
-        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-          Inside the placement dashboard
-        </h2>
-
-        <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-          {transferCenterFocus.map(({ label, detail }) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
-                {label}
-              </dt>
-              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <p className="mt-8 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
-          Built on synthetic, Epic-shaped data. No real patient records are used,
-          and this app is a demonstration piece rather than a clinical tool.
-        </p>
-      </section>
-
-      <hr className="my-14 border-line sm:my-16" />
-
-      <section id="clinical-ai" className="scroll-mt-20">
-        <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">
-          Clinical AI
-        </h2>
-
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          A model that scores well in a notebook and a model that changes what a
-          nurse does at three in the morning are two different problems. Twelve
-          years in critical care and patient placement is what I bring to the
-          second one — reading whether a prediction fits the work, and whether
-          the people on the receiving end will act on it.
-        </p>
-
-        <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-          {clinicalAiFocus.map(({ label, detail }) => (
-            <div key={label} className="border-t border-line pt-3">
-              <dt className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
-                {label}
-              </dt>
-              <dd className="mt-1 text-sm text-ink-muted">{detail}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <p className="mt-8 max-w-2xl rounded-sm bg-accent-soft px-4 py-3 text-sm text-ink-muted">
-          The transfer assistant is where this is worked out in code: every
-          extracted field carries the source text it came from, the model
-          abstains rather than guessing when evidence is thin, and a coordinator
-          accepts the suggested route or chooses a different route. Synthetic data only, decision
-          support only — it is not validated for clinical use.
-        </p>
       </section>
 
       <hr className="my-14 border-line sm:my-16" />
@@ -260,7 +347,7 @@ export default function Home() {
         </h2>
 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Open to clinical analytics, clinical AI, and data science roles. The
+          Open to data analytics, clinical AI, and data science roles. The
           fastest way to reach me is email.
         </p>
 

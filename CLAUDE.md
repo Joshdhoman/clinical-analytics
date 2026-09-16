@@ -40,9 +40,21 @@ not reintroduce social links.
    Deliberately about judgment and approach, not a portfolio of built models;
    the clinical experience is the credential here. Targets Clinical AI
    Application Analyst-type roles.
-4. **Quantitative research** — branded data visualizations. Undecided; this
-   section was originally scoped around the X audience and may be cut.
+4. **Data visualization** — twelve finished charts from The Homan Quant,
+   framed around chart form and method rather than subject. On the home page it
+   is the second card in "Selected work" (after the transfer assistant, before
+   patient placement), previews three charts and links to `/visualizations`;
+   the list lives in
+   `lib/visualizations.ts`, images in `public/images/viz/`. The charts are
+   dark-themed by design (they are images, not UI) and sit inside `border-line`
+   frames on the white page. No social links — the series is named, not linked.
 5. **Contact**
+
+On the page, sections 2–4 are all cards inside one "Selected work" list, and
+the "Clinical AI" and "Inside the placement dashboard" detail blocks hang
+directly off their project cards (`ProjectDetail` inside `ProjectCard`) rather
+than standing as separate sections. Contact says "data analytics, clinical AI,
+and data science roles" — broader than clinical analytics alone, by decision.
 
 Build one section at a time. Josh reviews each before the next starts.
 
@@ -87,7 +99,8 @@ line up in a column (stat readouts, chart labels, table cells).
 ## Status
 
 - Done: scaffold, design tokens, metadata / OG / favicon / robots / sitemap,
-  README, hero, selected work, project focus, clinical AI, contact.
+  README, hero, selected work, project focus, clinical AI, data visualization
+  (home section + `/visualizations`), contact.
 - **Live at https://clinical-analytics.vercel.app** — Vercel, git-linked, so a
   push to `main` auto-deploys. Vercel Authentication is deliberately off; it
   ships on by default and puts a login wall in front of the site.

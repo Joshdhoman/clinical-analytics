@@ -23,7 +23,7 @@ export default function PatientPlacementCaseStudy() {
       <header className="mt-10">
         <p className="numeral text-xs uppercase tracking-[0.22em] text-ink-subtle">Case study · Clinical operations</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Patient placement,<br />in perspective.</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">An overall length-of-stay comparison can hide the differences between the patients entering through a transfer center and those admitted from the emergency department. This dashboard puts the care mix next to the outcome, so the question becomes more specific: how do stays compare within a level of care?</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">An overall length-of-stay comparison can hide the differences between the patients entering through a transfer center and those admitted from the emergency department. This dashboard puts the care mix next to the outcome, so the question becomes more specific: how do hospital stays compare within a level of care?</p>
         <div className="mt-8 flex flex-wrap items-center gap-6">
           {siteConfig.dashboardDemoUrl ? <a href={siteConfig.dashboardDemoUrl} target="_blank" rel="noreferrer" className="rounded-sm bg-accent px-4 py-2 text-sm font-medium text-ink-inverse">Open the live app</a> : null}
           <a href={siteConfig.dashboardUrl} target="_blank" rel="noreferrer" className="font-medium text-accent-ink underline decoration-accent underline-offset-4">Source and methodology</a>
@@ -32,7 +32,7 @@ export default function PatientPlacementCaseStudy() {
       </header>
       <figure className="mt-12">
         <Image src="/images/patient-placement.png" alt="Patient placement dashboard showing cohort filters, encounter counts, transfer share, median length-of-stay gap, monthly admission volumes, and care-level composition." width={1440} height={1280} sizes="(min-width: 1024px) 68rem, 100vw" className="h-auto w-full rounded-sm border border-line" />
-        <figcaption className="mt-3 text-sm text-ink-subtle">The overview connects admission volume, care mix, and the unadjusted LOS gap. Every number follows the selected cohort.</figcaption>
+        <figcaption className="mt-3 text-sm text-ink-subtle">The overview shows how many patients came in, what level of care they needed, and the raw length-of-stay difference between transfers and ED admits. Change the filters and every number on the screen updates to match.</figcaption>
       </figure>
       <section className="mt-16">
         <h2 className="text-sm font-medium uppercase tracking-[0.22em] text-ink-subtle">Four questions, one cohort</h2>
