@@ -6,7 +6,7 @@ import { visualizations } from "@/lib/visualizations";
 export const metadata: Metadata = {
   title: "Data visualization",
   description:
-    "Nine finished data visualizations: regression, event studies, rolling correlation, choropleths, and small multiples, each with a note on how the figure was produced.",
+    "Eight finished data visualizations: regression, event studies, rolling correlation, and small multiples, each with a note on how the figure was produced.",
   alternates: { canonical: "/visualizations" },
 };
 
@@ -52,9 +52,9 @@ export default function VisualizationsPage() {
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           Finished exhibits from The Homan Quant, a data-visualization series I
-          write and design. The subjects range from markets to healthcare
-          policy; the constant is the method. Each chart below says what form
-          it takes and how the figure was produced.
+          write and design. The topics change from chart to chart — sports,
+          housing, markets, labor. The way each one is built does not. Each
+          chart below says what form it takes and how the figure was produced.
         </p>
       </header>
 

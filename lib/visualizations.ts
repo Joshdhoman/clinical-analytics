@@ -91,17 +91,6 @@ export const visualizations: Visualization[] = [
     alt: "Scatter plot of monthly new-home starts against the 30-year Treasury rate with a downward-sloping best-fit line and today's point marked.",
   },
   {
-    slug: "aca-payment-map",
-    src: "/images/viz/aca-payment-map.png",
-    width: 1080,
-    height: 1350,
-    title: "Who actually paid",
-    chartType: "Choropleth",
-    method:
-      "Share of 2026 ACA marketplace sign-ups who paid a premium and had coverage in February, by state, on a diverging scale with an inset for the small states. The split underneath — federal-exchange states at 78.7%, state-run exchanges at 93.9% — is the finding.",
-    alt: "Choropleth map of the United States colored by the share of ACA sign-ups who paid a premium, with an inset for small states and a comparison of federal versus state-run exchanges.",
-  },
-  {
     slug: "productivity-pay-gap",
     src: "/images/viz/productivity-pay-gap.png",
     width: 1080,

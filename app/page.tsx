@@ -87,7 +87,7 @@ const projects: Project[] = [
 ];
 
 /** The three charts previewed on the home page, chosen to span domains. */
-const featuredVisualizations = ["aca-payment-map", "nfl-model-vs-vegas", "mortgage-rates-vs-homebuilding"]
+const featuredVisualizations = ["nfl-model-vs-vegas", "mortgage-rates-vs-homebuilding", "productivity-pay-gap"]
   .map((slug) => visualizations.find((viz) => viz.slug === slug))
   .filter((viz) => viz !== undefined);
 
@@ -277,9 +277,9 @@ export default function Home() {
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           Finished charts from a data-visualization series I write and design:
           regression and event studies, rolling correlation against a null
-          band, choropleths, small multiples. The subjects vary; the discipline
-          is the same one the healthcare work runs on — the method is on the
-          chart and the claim is sized to the evidence.
+          band, small multiples. The topics change from chart to chart. The
+          way each one is built does not: the data source and calculation are
+          printed on the chart, and the claim is no bigger than the evidence.
         </p>
 
         <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-3">
