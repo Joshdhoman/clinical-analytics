@@ -58,17 +58,6 @@ export const visualizations: Visualization[] = [
     alt: "Dumbbell chart of all 32 NFL teams, each showing a model-projected win total beside the Vegas line, with the twelve largest disagreements highlighted.",
   },
   {
-    slug: "btc-power-law-four-fits",
-    src: "/images/viz/btc-power-law-four-fits.png",
-    width: 1080,
-    height: 1350,
-    title: "One regression, four vintages",
-    chartType: "Small multiples",
-    method:
-      "The same log-log fit refit using only the data that existed in 2013, 2015, 2021, and today. Shaded wedges are each fit's own residual quantiles. It shows how much a long-horizon projection depends on when the clock stopped.",
-    alt: "Four small log-log price charts, each with a fitted power-law line and quantile bands, showing the projected 2030 value changing with the fit date.",
-  },
-  {
     slug: "btc-gold-rolling-correlation",
     src: "/images/viz/btc-gold-rolling-correlation.png",
     width: 1080,
@@ -111,5 +100,38 @@ export const visualizations: Visualization[] = [
     method:
       "Net productivity and median hourly compensation indexed to 1979, then EPI's decomposition of the gap into three components as a single stacked bar. Two chart forms carry one argument.",
     alt: "Area chart of productivity rising 72 percent against pay rising 16 percent from 1979 to 2019, above a stacked bar decomposing the gap into three causes.",
+  },
+  {
+    slug: "satisfaction-by-income",
+    src: "/images/viz/satisfaction-by-income.png",
+    width: 1080,
+    height: 1350,
+    title: "Satisfaction by household income",
+    chartType: "Bar chart with reference line",
+    method:
+      "Share of workers who say they are satisfied, for households under $25,000 and at $150,000 or more, against the national figure as a dashed reference line. Two bars and one line carry a 31-point gap. The Conference Board Job Satisfaction survey, 2026.",
+    alt: "Two bars showing 45.3 percent job satisfaction for households under 25,000 dollars and 76 percent for households at 150,000 or more, with a dashed line at the 68.9 percent national figure.",
+  },
+  {
+    slug: "satisfaction-vs-quits",
+    src: "/images/viz/satisfaction-vs-quits.png",
+    width: 1080,
+    height: 1350,
+    title: "Satisfaction up, quitting down",
+    chartType: "Dual-axis lines",
+    method:
+      "Overall job satisfaction from The Conference Board's annual survey, 2010 to 2026, on the left axis; the monthly quits rate from BLS JOLTS on the right. Two series from two sources, with the endpoints and the 2022 quits peak labeled directly on the lines.",
+    alt: "Line chart with job satisfaction rising from 42.6 percent in 2010 to a record 68.9 percent in 2026, and the quits rate peaking at 2.8 percent in 2022 before falling to 1.9 percent.",
+  },
+  {
+    slug: "jobs-by-industry",
+    src: "/images/viz/jobs-by-industry.png",
+    width: 1080,
+    height: 1350,
+    title: "Where the jobs were added",
+    chartType: "Diverging bar",
+    method:
+      "Over-the-month change in payroll employment by industry, in thousands, from the August 2026 BLS Employment Situation. Sorted by size, gains and losses on either side of a zero line, with the two industries that made up 60 percent of the total set in the accent color.",
+    alt: "Horizontal diverging bar chart of August 2026 job changes by industry, led by leisure and hospitality at plus 62 thousand and government at plus 35 thousand, with financial activities and information negative.",
   },
 ];

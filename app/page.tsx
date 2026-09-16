@@ -277,7 +277,7 @@ export default function Home() {
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
           Finished charts from a data-visualization series I write and design:
           regression and event studies, rolling correlation against a null
-          band, small multiples. The topics change from chart to chart. The
+          band, labor-market series. The topics change from chart to chart. The
           way each one is built does not: the data source and calculation are
           printed on the chart, and the claim is no bigger than the evidence.
         </p>
