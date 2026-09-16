@@ -36,6 +36,17 @@ export const visualizations: Visualization[] = [
     alt: "Ranked horizontal bar chart of 2026 Emmy wins by platform, above a multi-line chart of wins per season from 2019 to 2026 with the annual leader labeled.",
   },
   {
+    slug: "btc-gold-direction-heatmap",
+    src: "/images/viz/btc-gold-direction-heatmap.png",
+    width: 1080,
+    height: 1350,
+    title: "Bitcoin and gold, month by month",
+    chartType: "Calendar heatmap",
+    method:
+      "One square per month since January 2015, filled when both assets finished the month on the same side of zero. That happened in 72 of 139 months, 51.8 percent, against a coin-flip baseline of 50. The legend carries the counts so the reader can check the percentage.",
+    alt: "Calendar heatmap with one square per month from 2015 to 2026, filled in orange when Bitcoin and gold moved in the same direction, 72 filled and 67 not.",
+  },
+  {
     slug: "mortgage-rates-vs-homebuilding",
     src: "/images/viz/mortgage-rates-vs-homebuilding.png",
     width: 1080,
@@ -56,17 +67,6 @@ export const visualizations: Visualization[] = [
     method:
       "An ensemble of ridge regression, gradient boosting, and a random forest, trained on 736 team-seasons since 2002 and walk-forward tested on 15 unseen seasons. Each team's projection sits beside the sportsbook line so the disagreement is the chart.",
     alt: "Dumbbell chart of all 32 NFL teams, each showing a model-projected win total beside the Vegas line, with the twelve largest disagreements highlighted.",
-  },
-  {
-    slug: "btc-gold-direction-heatmap",
-    src: "/images/viz/btc-gold-direction-heatmap.png",
-    width: 1080,
-    height: 1350,
-    title: "Bitcoin and gold, month by month",
-    chartType: "Calendar heatmap",
-    method:
-      "One square per month since January 2015, filled when both assets finished the month on the same side of zero. That happened in 72 of 139 months, 51.8 percent, against a coin-flip baseline of 50. The legend carries the counts so the reader can check the percentage.",
-    alt: "Calendar heatmap with one square per month from 2015 to 2026, filled in orange when Bitcoin and gold moved in the same direction, 72 filled and 67 not.",
   },
   {
     slug: "fed-hike-event-study",
