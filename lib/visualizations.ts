@@ -58,15 +58,15 @@ export const visualizations: Visualization[] = [
     alt: "Dumbbell chart of all 32 NFL teams, each showing a model-projected win total beside the Vegas line, with the twelve largest disagreements highlighted.",
   },
   {
-    slug: "btc-gold-rolling-correlation",
-    src: "/images/viz/btc-gold-rolling-correlation.png",
+    slug: "btc-gold-direction-heatmap",
+    src: "/images/viz/btc-gold-direction-heatmap.png",
     width: 1080,
     height: 1350,
-    title: "Signal or noise?",
-    chartType: "Rolling correlation with null band",
+    title: "Bitcoin and gold, month by month",
+    chartType: "Calendar heatmap",
     method:
-      "A 24-month rolling correlation of monthly log returns, plotted inside the 95% interval that two unrelated series would produce by chance. Ninety-seven percent of windows since 2017 never leave the band.",
-    alt: "Line chart of a rolling 24-month correlation oscillating between minus 0.3 and 0.45, almost entirely inside a shaded band labeled the 95% no-signal range.",
+      "One square per month since January 2015, filled when both assets finished the month on the same side of zero. That happened in 72 of 139 months, 51.8 percent, against a coin-flip baseline of 50. The legend carries the counts so the reader can check the percentage.",
+    alt: "Calendar heatmap with one square per month from 2015 to 2026, filled in orange when Bitcoin and gold moved in the same direction, 72 filled and 67 not.",
   },
   {
     slug: "fed-hike-event-study",
@@ -89,17 +89,6 @@ export const visualizations: Visualization[] = [
     method:
       "The S&P 500's implied daily move (prior VIX close divided by the square root of 252) drawn behind the realized close-to-close move for 23 sessions. Days that moved more than priced are flagged, and the averages are summarized below the chart.",
     alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
-  },
-  {
-    slug: "productivity-pay-gap",
-    src: "/images/viz/productivity-pay-gap.png",
-    width: 1080,
-    height: 1350,
-    title: "Where a 56-point gap came from",
-    chartType: "Area chart + decomposition",
-    method:
-      "Net productivity and median hourly compensation indexed to 1979, then EPI's decomposition of the gap into three components as a single stacked bar. Two chart forms carry one argument.",
-    alt: "Area chart of productivity rising 72 percent against pay rising 16 percent from 1979 to 2019, above a stacked bar decomposing the gap into three causes.",
   },
   {
     slug: "satisfaction-by-income",
@@ -133,5 +122,27 @@ export const visualizations: Visualization[] = [
     method:
       "Over-the-month change in payroll employment by industry, in thousands, from the August 2026 BLS Employment Situation. Sorted by size, gains and losses on either side of a zero line, with the two industries that made up 60 percent of the total set in the accent color.",
     alt: "Horizontal diverging bar chart of August 2026 job changes by industry, led by leisure and hospitality at plus 62 thousand and government at plus 35 thousand, with financial activities and information negative.",
+  },
+  {
+    slug: "tiktok-us-ownership",
+    src: "/images/viz/tiktok-us-ownership.png",
+    width: 1080,
+    height: 1350,
+    title: "Who runs TikTok's U.S. business",
+    chartType: "Stacked bar + sourced table",
+    method:
+      "A 100 percent stacked bar of ownership before and after the joint venture, board seats as a unit chart, then a who-runs-what table with a column for who says so. Built from the joint-venture filing, the White House fact sheet, a DOJ opinion, and a House committee letter; five of the six answers rest on TikTok's own account, and the chart says so.",
+    alt: "Stacked bar showing ByteDance's TikTok stake falling from 100 percent to 19.9 percent alongside Oracle, Silver Lake, MGX, and other investors, above a table of who controls data, algorithm, moderation, and ads, each with its source.",
+  },
+  {
+    slug: "study-329-outcomes",
+    src: "/images/viz/study-329-outcomes.jpg",
+    width: 1264,
+    height: 1568,
+    title: "Nine outcomes promised, four published",
+    chartType: "Unit bars, before and after",
+    method:
+      "Study 329, an antidepressant trial in adolescents published in 2001. The top stack is the nine outcomes written down before the trial, none of which beat placebo; the bottom is the four positive results in the published paper, none of which were on the original list. Counts from the 2015 independent reanalysis in The BMJ.",
+    alt: "Two stacks of horizontal bars: nine gray bars for outcomes promised before the trial, none of which beat a sugar pill, and four gold bars for positive results reported in the published paper, none of which were pre-specified.",
   },
 ];
