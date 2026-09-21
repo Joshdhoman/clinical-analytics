@@ -6,7 +6,7 @@ import { visualizations } from "@/lib/visualizations";
 export const metadata: Metadata = {
   title: "Data visualization",
   description:
-    "Twelve finished data visualizations: regression, event studies, a calendar heatmap, and labor-market charts, each with a note on how the figure was produced.",
+    "Sixteen finished data visualizations: regression, event studies, heatmaps, market history, and labor-market charts, each with a note on how the figure was produced.",
   alternates: { canonical: "/visualizations" },
 };
 

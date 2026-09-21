@@ -1,7 +1,8 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { visualizations } from "@/lib/visualizations";
+import transferAssistantPreview from "@/app/projects/transfer-assistant/images/request-review.png";
 
 const transferCenterFocus = [
   {
@@ -54,6 +55,8 @@ type Project = {
   demoHref?: string;
   /** Set when the project has a write-up on this site. */
   caseStudyHref?: string;
+  previewImage: StaticImageData | string;
+  previewAlt: string;
   tags: string[];
 };
 
@@ -66,6 +69,9 @@ const projects: Project[] = [
     href: siteConfig.transferAssistantUrl,
     demoHref: siteConfig.transferAssistantDemoUrl,
     caseStudyHref: "/projects/transfer-assistant",
+    previewImage: transferAssistantPreview,
+    previewAlt:
+      "Clinical AI Transfer Assistant showing a synthetic transfer request, provisional ICU routing, and extracted evidence",
     tags: [
       "NLP",
       "Interpretable ML",
@@ -82,6 +88,9 @@ const projects: Project[] = [
     href: siteConfig.dashboardUrl,
     demoHref: siteConfig.dashboardDemoUrl,
     caseStudyHref: "/projects/patient-placement",
+    previewImage: "/images/patient-placement.png",
+    previewAlt:
+      "Patient Placement Analytics dashboard showing encounter totals, transfer share, length of stay, and admission trends",
     tags: ["Streamlit", "Healthcare", "Operational analytics", "Synthetic data"],
   },
 ];
@@ -161,6 +170,30 @@ function ProjectCard({
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">
         {project.description}
       </p>
+
+      {project.demoHref ? (
+        <a
+          href={project.demoHref}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Open the live ${project.title} app`}
+          className="group mt-6 block overflow-hidden rounded-sm border border-line bg-surface transition-colors hover:border-line-strong"
+        >
+          <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-surface">
+            <Image
+              src={project.previewImage}
+              alt={project.previewAlt}
+              fill
+              sizes="(min-width: 1152px) 1088px, calc(100vw - 48px)"
+              className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.01]"
+            />
+          </div>
+          <span className="flex items-center justify-between gap-4 px-4 py-3 text-sm font-medium text-accent-ink">
+            Preview the live app
+            <span aria-hidden="true">↗</span>
+          </span>
+        </a>
+      ) : null}
 
       <div className="mt-5 flex flex-wrap gap-2">
         {project.tags.map((tag) => (

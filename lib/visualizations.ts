@@ -156,4 +156,48 @@ export const visualizations: Visualization[] = [
       "The S&P 500's implied daily move (prior VIX close divided by the square root of 252) drawn behind the realized close-to-close move for 23 sessions. Days that moved more than priced are flagged, and the averages are summarized below the chart.",
     alt: "Bar chart of 23 trading days comparing the options-implied daily move to the actual move, with five days exceeding the implied move highlighted.",
   },
+  {
+    slug: "aaii-bearish-sentiment",
+    src: "/images/viz/aaii-bearish-sentiment.png",
+    width: 1080,
+    height: 1350,
+    title: "How unusual is 53.3% bearish sentiment?",
+    chartType: "Strip plot with callout",
+    method:
+      "Every weekly AAII bearish-sentiment reading since 1987, with the latest observation isolated against the full historical distribution. Only 49 weeks in the series were higher.",
+    alt: "Strip plot of weekly bearish investor sentiment since 1987, with the latest 53.3 percent reading highlighted near the upper end of the distribution.",
+  },
+  {
+    slug: "vix-small-multiples",
+    src: "/images/viz/vix-small-multiples.png",
+    width: 1080,
+    height: 1350,
+    title: "Volatility, year by year",
+    chartType: "Small multiples",
+    method:
+      "Nine years of daily VIX closes on one shared scale, with each panel labeled by its annual average. The common scale keeps quiet years and shock years directly comparable.",
+    alt: "Nine small line charts showing daily VIX closes from 2018 through 2026 on a shared scale, each labeled with its annual average.",
+  },
+  {
+    slug: "treasury-yield-by-decade",
+    src: "/images/viz/treasury-yield-by-decade.png",
+    width: 1080,
+    height: 1350,
+    title: "The 10-year Treasury across decades",
+    chartType: "Summary table",
+    method:
+      "Average, high, and low monthly 10-year Treasury yields for each decade since the 1950s. The 1950s begin in April 1953 and the 2020s run through July 2026.",
+    alt: "Table of average, high, and low 10-year Treasury yields by decade from the 1950s through the 2020s.",
+  },
+  {
+    slug: "nfl-point-spread-errors",
+    src: "/images/viz/nfl-point-spread-errors.png",
+    width: 1080,
+    height: 1350,
+    title: "How far NFL point spreads miss",
+    chartType: "Distribution strip plot",
+    method:
+      "The absolute error for 7,293 NFL regular-season and playoff point spreads since 1999. The median miss is 8.5 points, and only 21 percent of games finish within three points of the line.",
+    alt: "Distribution of absolute NFL point-spread errors since 1999, with the three-point range and median error of 8.5 points marked.",
+  },
 ];
