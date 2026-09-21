@@ -96,7 +96,7 @@ const projects: Project[] = [
 ];
 
 /** The three charts previewed on the home page, chosen to span domains. */
-const featuredVisualizations = ["nfl-model-vs-vegas", "mortgage-rates-vs-homebuilding", "btc-gold-direction-heatmap"]
+const featuredVisualizations = ["nfl-point-spread-errors", "vix-small-multiples", "emmys-wins-by-platform"]
   .map((slug) => visualizations.find((viz) => viz.slug === slug))
   .filter((viz) => viz !== undefined);
 
@@ -177,7 +177,7 @@ function ProjectCard({
           target="_blank"
           rel="noreferrer"
           aria-label={`Open the live ${project.title} app`}
-          className="group mt-6 block overflow-hidden rounded-sm border border-line bg-surface transition-colors hover:border-line-strong"
+          className="group mt-6 block max-w-[46rem] overflow-hidden rounded-sm border border-line bg-surface transition-colors hover:border-line-strong"
         >
           <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-surface">
             <Image
