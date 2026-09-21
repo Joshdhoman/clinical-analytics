@@ -177,7 +177,7 @@ function ProjectCard({
           target="_blank"
           rel="noreferrer"
           aria-label={`Open the live ${project.title} app`}
-          className="group mt-6 block max-w-[46rem] overflow-hidden rounded-sm border border-line bg-surface transition-colors hover:border-line-strong"
+          className="group mt-6 block max-w-xl overflow-hidden rounded-sm border border-line bg-surface transition-colors hover:border-line-strong"
         >
           <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-surface">
             <Image
