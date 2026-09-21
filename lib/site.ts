@@ -40,7 +40,8 @@ export const siteConfig = {
   transferAssistantUrl:
     "https://github.com/Joshdhoman/clinical-ai-transfer-assistant",
   transferAssistantDemoUrl: "https://clinical-ai-transfer-assistant.streamlit.app",
-  resumeUrl: "/Josh_Homan_Resume_Sept_2026.pdf",
+  resumeUrl:
+    "https://docs.google.com/document/d/1wuSksDcbX0cJ1ZUDRnTyYIC1NnmzeT7F8jY78skgwNY/edit?tab=t.0",
 } as const;
 
 /**
