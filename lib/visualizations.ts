@@ -1,7 +1,7 @@
 /**
  * The data-visualization gallery, in display order.
  *
- * Every chart here is a finished exhibit from The Homan Quant, a
+ * Every chart here is a finished exhibit from THQ Research, a
  * data-visualization series Josh writes and designs. Each entry says what
  * kind of chart it is and how the figure was produced, because the point of
  * the gallery is the craft and the method, not the subject.

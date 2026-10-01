@@ -40,7 +40,7 @@ not reintroduce social links.
    Deliberately about judgment and approach, not a portfolio of built models;
    the clinical experience is the credential here. Targets Clinical AI
    Application Analyst-type roles.
-4. **Data visualization** — twelve finished charts from The Homan Quant,
+4. **Data visualization** — twelve finished charts from THQ Research (formerly The Homan Quant),
    framed around chart form and method rather than subject. On the home page it
    is the second card in "Selected work" (after the transfer assistant, before
    patient placement), previews three charts and links to `/visualizations`;

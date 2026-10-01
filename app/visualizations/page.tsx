@@ -28,7 +28,7 @@ export default function VisualizationsPage() {
           Data visualization
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Finished exhibits from The Homan Quant, a data-visualization series I
+          Finished exhibits from THQ Research, a data-visualization series I
           write and design. The topics change from chart to chart — sports,
           housing, markets, labor. The way each one is built does not. Each
           chart below has the chart type listed and a note on how the figure
